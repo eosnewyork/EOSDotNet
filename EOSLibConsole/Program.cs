@@ -21,6 +21,7 @@ namespace EOSLibConsole
             EOSInfo.dumpInfo();
 
             Console.WriteLine("Done");
+            Console.ReadLine();
 
         }
     }
