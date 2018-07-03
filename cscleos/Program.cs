@@ -63,19 +63,23 @@ namespace cscleos
         private static bool CheckProperties<T>(getKnownTableArguments arg) where T : IEOSTable
         {
             bool error = false;
-            foreach (var field in arg.fieldList)
+            if(arg.fieldList != null)
             {
-                if (typeof(T).GetProperty(field) == null)
+                foreach (var field in arg.fieldList)
                 {
-                    Console.WriteLine(string.Format("Table rows do not contain field \"{0}\"", field));
-                    Console.WriteLine("Valid fields include:");
-                    PropertyInfo[] properties = typeof(T).GetProperties();
-                    foreach (var property in properties)
+                    if (typeof(T).GetProperty(field) == null)
                     {
-                        Console.WriteLine(property.Name);
+                        Console.WriteLine(string.Format("Table rows do not contain field \"{0}\"", field));
+                        Console.WriteLine("Valid fields include:");
+                        PropertyInfo[] properties = typeof(T).GetProperties();
+                        foreach (var property in properties)
+                        {
+                            Console.WriteLine(property.Name);
+                        }
+                        error = true;
                     }
-                    error = true;
                 }
+
             }
             return error;
         }
