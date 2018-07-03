@@ -32,7 +32,7 @@ namespace EOSLib
         public static void updateProxyVotersWithProducerInfo(ref List<EOSVoter_row> voters)
         {
 
-            //logger.Info("Correting proxy voter data");
+            //logger.Debug("Correting proxy voter data");
             int proxyVoterCount = 0;
             // Loop through the full resultset and correct producer list on those that chose to vote via proxy
             foreach (var row in voters)
@@ -48,7 +48,7 @@ namespace EOSLib
 
             }
 
-            logger.Info("{0} proxy votes updated", proxyVoterCount);
+            logger.Debug("{0} proxy votes updated", proxyVoterCount);
 
         }
 

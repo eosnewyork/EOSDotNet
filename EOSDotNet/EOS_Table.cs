@@ -70,7 +70,7 @@ namespace EOSLib
 
             while (more)
             {
-                logger.Info("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3}", limit, t.ToString(), requestCount, lower_bound);
+                logger.Debug("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3}", limit, t.ToString(), requestCount, lower_bound);
 
                 string startkey = string.Empty;
                 var result = await getDataSubset(lower_bound, limit);
@@ -93,7 +93,7 @@ namespace EOSLib
             }
 
             watch.Stop();
-            logger.Info("Done fetching ALL results. Total duration = {0}", watch.Elapsed);
+            logger.Debug("Done fetching ALL results. Total duration = {0}", watch.Elapsed);
 
             //Now that we've fetched all the subsets, merge then into one lage resultset and return to the user. 
             return merge();

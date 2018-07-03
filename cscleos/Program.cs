@@ -124,11 +124,7 @@ namespace cscleos
             }
         }
 
-        [ArgActionMethod, ArgDescription("Set or update blockchain state")]
-        public void set(string arg)
-        {
-            Console.WriteLine("This method still under construction");
-        }
+
 
     }
 

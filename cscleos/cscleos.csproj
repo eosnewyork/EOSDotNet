@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EOSLib\EOSLib.csproj" />
+    <ProjectReference Include="..\EOSDotNet\EOSDotNet.csproj" />
   </ItemGroup>
 
 </Project>

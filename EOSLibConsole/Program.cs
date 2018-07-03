@@ -40,7 +40,7 @@ namespace EOSLibConsole
             EOS_Object infoObj = new EOS_Object(HOST);
             var info = infoObj.getAllObjectRecordsAsync<EOSInfo_row>().Result;
 
-            logger.Info("{0} is currently the head block producer", info.head_block_producer);
+            logger.Debug("{0} is currently the head block producer", info.head_block_producer);
 
 
         }
@@ -51,7 +51,7 @@ namespace EOSLibConsole
 
             foreach (var global in globalInfo)
             {
-                logger.Info("total_producer_vote_weight : {0}", global.total_producer_vote_weight);
+                logger.Debug("total_producer_vote_weight : {0}", global.total_producer_vote_weight);
             }
 
         }
@@ -79,9 +79,9 @@ namespace EOSLibConsole
             {
                 string line = string.Format("{0}\t{1}\t{2}\t{3}\t{4}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url);
                 tsvproducers.AppendLine(line);
-                //logger.Info(line);
+                //logger.Debug(line);
             }
-            logger.Info("Write {0} records to disk", producers.Count);
+            logger.Debug("Write {0} records to disk", producers.Count);
             File.WriteAllText("producerReport.txt", tsvproducers.ToString());
 
             IEnumerable<EOSProducer_row> query = producers.OrderByDescending(producer => producer.total_votes_long);
