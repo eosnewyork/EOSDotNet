@@ -16,9 +16,12 @@ If you're a .NET develiper and would like to contribute to the project, we'd wel
 ## What's in the box?
 
 This repository currently contains three projects:
-* EOSDotNet - This the library which can be included into your own project to build great things.  
-* cscleos - This is an example project which makes use of the EOSDotNet class library. The commandline tool allows users to query system tables on the EOS Blockchain easily. As functionality is added to the EOSDotNet class library, this tool will expanded with useful features that leverage those functions. 
-* EOSLibConsole - A scratch pad with some test which don't yet fit into the cscleos tool.
+
+* **EOSDotNet** - This the library which can be included into your own project to build great things.  
+
+* **cscleos** - This is an example project which makes use of the EOSDotNet class library. The commandline tool allows users to query system tables on the EOS Blockchain easily. As functionality is added to the EOSDotNet class library, this tool will expanded with useful features that leverage those functions. 
+
+* **EOSLibConsole** - A scratch pad with some test which don't yet fit into the cscleos tool.
 
 ### cscleos
 
@@ -117,10 +120,56 @@ foreach (var _producer in producers)
 
 ## Installation
 
-The project currently target .NET Core 2.1 and has been tested on:
+
+
+1. Install .NET core on your OS (Yes, this really works on Linux, and macOS) - easy to follow instructions can be found here
+https://www.microsoft.com/net/learn/get-started
+
+2. Clone the repo
+```
+git clone https://github.com/eosnewyork/EOSDotNet.git
+cd EOSDotNet
+```
+
+Execute one of the following commands to create binaries:
 
 ```
 dotnet publish -c release -r win10-x64
 dotnet publish -c release -r osx.10.10-x64
 dotnet publish -c release -r ubuntu.14.04-x64
+```
+Output will differ based on your system. Here's some example output from Ubuntu
+
+```
+$dotnet publish -c release -r ubuntu.14.04-x64
+Microsoft (R) Build Engine version 15.7.179.6572 for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restoring packages for /home/ubuntu/test1/EOSDotNet/EOSDotNet/EOSDotNet.csproj...
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/EOSDotNet/obj/EOSDotNet.csproj.nuget.g.props.
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/EOSDotNet/obj/EOSDotNet.csproj.nuget.g.targets.
+  Restore completed in 253.11 ms for /home/ubuntu/test1/EOSDotNet/EOSDotNet/EOSDotNet.csproj.
+  Restoring packages for /home/ubuntu/test1/EOSDotNet/cscleos/cscleos.csproj...
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/cscleos/obj/cscleos.csproj.nuget.g.props.
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/cscleos/obj/cscleos.csproj.nuget.g.targets.
+  Restore completed in 51.47 ms for /home/ubuntu/test1/EOSDotNet/cscleos/cscleos.csproj.
+  Restoring packages for /home/ubuntu/test1/EOSDotNet/EOSLibConsole/EOSLibConsole.csproj...
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/EOSLibConsole/obj/EOSLibConsole.csproj.nuget.g.props.
+  Generating MSBuild file /home/ubuntu/test1/EOSDotNet/EOSLibConsole/obj/EOSLibConsole.csproj.nuget.g.targets.
+  Restore completed in 23.63 ms for /home/ubuntu/test1/EOSDotNet/EOSLibConsole/EOSLibConsole.csproj.
+  EOSDotNet -> /home/ubuntu/test1/EOSDotNet/EOSDotNet/bin/Release/netcoreapp2.1/EOSDotNet.dll
+  EOSDotNet -> /home/ubuntu/test1/EOSDotNet/EOSDotNet/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/EOSDotNet.dll
+  EOSDotNet -> /home/ubuntu/test1/EOSDotNet/EOSDotNet/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/publish/
+  EOSLibConsole -> /home/ubuntu/test1/EOSDotNet/EOSLibConsole/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/EOSLibConsole.dll
+  EOSLibConsole -> /home/ubuntu/test1/EOSDotNet/EOSLibConsole/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/publish/
+  cscleos -> /home/ubuntu/test1/EOSDotNet/cscleos/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/cscleos.dll
+  cscleos -> /home/ubuntu/test1/EOSDotNet/cscleos/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/publish/
+
+```
+
+```
+# Change directly to the cscleos publish folder
+cd cscleos/bin/Release/netcoreapp2.1/ubuntu.14.04-x64/publish/
+#Run the cscleos without params to print the help
+./cscleos 
 ```
