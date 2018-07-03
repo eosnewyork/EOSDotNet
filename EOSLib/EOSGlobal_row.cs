@@ -8,7 +8,7 @@ namespace EOSLib
 {
     public class EOSGlobal_row : IEOSTable
     {
-        public string total_producer_vote_weight;
+        public string total_producer_vote_weight { get; set; }
 
         public EOSTableMetadata getMetadata()
         {
