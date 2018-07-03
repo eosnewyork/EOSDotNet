@@ -8,12 +8,12 @@ namespace EOSLib
 {
     public class EOSProducer_row : IEOSTable
     {
-        public string owner;
-        public string total_votes;
-        public string producer_key;
-        public bool is_active;
-        public long unpaid_blocks;
-        public string url;
+        public string owner { get; set; }
+        public string total_votes { get; set; }
+        public string producer_key { get; set; }
+        public bool is_active { get; set; }
+        public long unpaid_blocks { get; set; }
+        public string url { get; set; }
 
         public double total_votes_long
         {

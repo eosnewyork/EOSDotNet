@@ -8,12 +8,12 @@ namespace EOSLib
 {
     public class EOSVoter_row : IEOSTable
     {
-        public string owner;
-        public string proxy;
-        public Int64 staked;
-        public double last_vote_weight;
-        public double proxied_vote_weight;
-        public List<string> producers;
+        public string owner { get; set; }
+        public string proxy { get; set; }
+        public Int64 staked { get; set; }
+        public double last_vote_weight { get; set; }
+        public double proxied_vote_weight { get; set; }
+        public List<string> producers { get; set; }
         public double last_vote_weight_for_this_account_only
         {
             get

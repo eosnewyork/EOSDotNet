@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EOSLib", "EOSLib\EOSLib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EOSLibConsole", "EOSLibConsole\EOSLibConsole.csproj", "{B2892120-CBF5-4ECB-915D-459E4122D540}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cscleos", "cscleos\cscleos.csproj", "{6CB84804-B79E-4F26-B7F3-0F5F663A287E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B2892120-CBF5-4ECB-915D-459E4122D540}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2892120-CBF5-4ECB-915D-459E4122D540}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2892120-CBF5-4ECB-915D-459E4122D540}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CB84804-B79E-4F26-B7F3-0F5F663A287E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB84804-B79E-4F26-B7F3-0F5F663A287E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB84804-B79E-4F26-B7F3-0F5F663A287E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB84804-B79E-4F26-B7F3-0F5F663A287E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

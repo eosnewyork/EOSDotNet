@@ -82,8 +82,8 @@ namespace EOSLib
                 if (more)
                 {
                     var lastRecord = result.rows[result.rows.Count - 1];
-                    FieldInfo fieldInfo = typeof(T).GetField(keyName);
-                    lower_bound = fieldInfo.GetValue(lastRecord).ToString();
+                    PropertyInfo propertyInfo = typeof(T).GetProperty(keyName);
+                    lower_bound = propertyInfo.GetValue(lastRecord).ToString();
                 }
 
                 requestCount++;
