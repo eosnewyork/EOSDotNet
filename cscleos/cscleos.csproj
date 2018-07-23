@@ -7,12 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="PowerArgs" Version="3.0.0" />
+    <PackageReference Include="PowerArgs" Version="3.5.0" />
     <PackageReference Include="ServiceStack.Text" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EOSDotNet\EOSDotNet.csproj" />
+    <ProjectReference Include="..\EOSNewYork.EOSCore\EOSNewYork.EOSCore.csproj" />
   </ItemGroup>
 
 </Project>

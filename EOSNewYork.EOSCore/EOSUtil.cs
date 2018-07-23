@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSLib
+namespace EOSNewYork.EOSCore
 {
     public static class EOSUtil
     {

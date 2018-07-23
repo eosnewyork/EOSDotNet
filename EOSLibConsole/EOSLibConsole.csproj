@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EOSDotNet\EOSDotNet.csproj" />
+    <ProjectReference Include="..\EOSNewYork.EOSCore\EOSNewYork.EOSCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,19 +7,21 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSLib
+namespace EOSNewYork.EOSCore
 {
-    public class EOS_Object
+    public class EOS_Object<T> where T : IEOAPI
     {
         Uri _host;
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
+        
         public EOS_Object(Uri host)
         {
-            _host = new Uri(host, "v1/chain/get_info");
+            var ObjType = (T)Activator.CreateInstance(typeof(T));
+            var meta = ObjType.getMetadata();
+            _host = new Uri(host, meta.uri);
         }
-
-        public async Task<T> getAllObjectRecordsAsync<T>()
+        
+        public async Task<T> getAllObjectRecordsAsync()
         {
             object result = null;
 

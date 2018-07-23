@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSLib
+namespace EOSNewYork.EOSCore
 {
     public class EOSNamebids_row : IEOSTable
     {

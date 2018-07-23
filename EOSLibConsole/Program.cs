@@ -1,11 +1,11 @@
-﻿using EOSLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using NLog;
+using EOSNewYork.EOSCore;
 
 namespace EOSLibConsole
 {
@@ -18,7 +18,8 @@ namespace EOSLibConsole
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
             //EOSInfo.dumpVoters();
-            EOSInfo.dumpInfo();
+            //EOSInfo.dumpInfo();
+            EOSInfo.dumpProduerSchedule();
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -34,15 +35,18 @@ namespace EOSLibConsole
 
         public static void dumpInfo()
         {
-            //var tbl = new EOS_Object<EOSInfo_row>(new Uri("https://api.eosnewyork.io"));
-            //var globalInfo = tbl.getAllTableRecordsAsync().Result;
+            var info = new EOS_Object<EOSInfo_row>(HOST).getAllObjectRecordsAsync().Result;
+            logger.Info("{0} is currently the head block producer", info.head_block_producer);
+        }
 
-            EOS_Object infoObj = new EOS_Object(HOST);
-            var info = infoObj.getAllObjectRecordsAsync<EOSInfo_row>().Result;
-
-            logger.Debug("{0} is currently the head block producer", info.head_block_producer);
-
-
+        public static void dumpProduerSchedule()
+        {
+            var info = new EOS_Object<EOSProducerSchedule_row>(HOST).getAllObjectRecordsAsync().Result;
+            foreach (var producer in info.active.producers)
+            {
+                logger.Info("{0}\t{1}", producer.producer_name, producer.block_signing_key);
+            }
+            
         }
 
         public static void dumpGlobal()

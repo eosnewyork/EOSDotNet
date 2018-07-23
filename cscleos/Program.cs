@@ -1,5 +1,4 @@
-﻿using EOSLib;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PowerArgs;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using ServiceStack;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using EOSNewYork.EOSCore;
 
 namespace cscleos
 {
