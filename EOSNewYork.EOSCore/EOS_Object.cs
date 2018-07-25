@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,35 @@ namespace EOSNewYork.EOSCore
             HttpClient client = new HttpClient();
             HttpResponseMessage response = null;
 
+            logger.Debug("HTTP GET: {0}", _host);
+
             response = await client.GetAsync(_host);
+            var responseString = await response.Content.ReadAsStringAsync();
+            T m = JsonConvert.DeserializeObject<T>(responseString);
+
+            result = m;
+            return (T)result;
+        }
+
+        public async Task<T> getAllObjectRecordsAsync(object postData)
+        {
+            
+            object result = null;
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = null;
+
+            string json = JsonConvert.SerializeObject(postData);
+            StringContent x = new StringContent(json);
+
+            logger.Debug("HTTP POST: {0}, DATA: {1}", _host, json);
+
+            response = await client.PostAsync(_host,x);
+
+            if(response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception("API Call did not respond with 200 OK");
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             T m = JsonConvert.DeserializeObject<T>(responseString);
 

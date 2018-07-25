@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using NLog;
 using EOSNewYork.EOSCore;
+using Newtonsoft.Json;
 
 namespace EOSLibConsole
 {
@@ -19,7 +20,8 @@ namespace EOSLibConsole
             //EOSInfo.dumpProducers();
             //EOSInfo.dumpVoters();
             //EOSInfo.dumpInfo();
-            EOSInfo.dumpProduerSchedule();
+            //EOSInfo.dumpProduerSchedule();
+            EOSInfo.dumpAccountInfo();
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -31,6 +33,16 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static Uri HOST = new Uri("https://api.eosnewyork.io");
+
+
+
+        public static void dumpAccountInfo()
+        {
+            var info = new EOS_Object<EOSAccount_row>(HOST).getAllObjectRecordsAsync(new EOSAccount_row.postData() { account_name = "guzdqmzqgyge" }).Result;
+            logger.Info("{0} is currently the returned account name", info.account_name);
+            string json = JsonConvert.SerializeObject(info);
+            logger.Info("{0}", json);
+        }
 
 
         public static void dumpInfo()

@@ -52,6 +52,20 @@ namespace EOSNewYork.EOSCore
 
         }
 
+        public static decimal eosToDecimal(string eosString)
+        {
+
+                var clean_core_liquid_balance = string.Empty;
+                if (eosString == null)
+                    clean_core_liquid_balance = "0.0";
+                else
+                    clean_core_liquid_balance = eosString.Trim().Replace(" EOS", "");
+
+                return decimal.Parse(clean_core_liquid_balance);
+         
+        }
+
+
         public static List<dynamic> filterFields<T>(List<string> properties, List<T> data) where T: IEOSTable
         {
             List<dynamic> objList = new List<dynamic>();
