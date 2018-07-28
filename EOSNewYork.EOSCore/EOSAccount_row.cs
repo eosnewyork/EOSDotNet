@@ -62,7 +62,7 @@ namespace EOSNewYork.EOSCore
         }
 
         public String core_liquid_balance { get; set; }
-        public decimal core_liquid_balance_decimal { get {
+        public decimal core_liquid_balance_ulong { get {
                 var clean_core_liquid_balance = string.Empty;
                 if (core_liquid_balance == null)
                     clean_core_liquid_balance = "0.0";
@@ -121,6 +121,34 @@ namespace EOSNewYork.EOSCore
         public string to { get; set; }
         public string net_weight { get; set; }
         public string cpu_weight { get; set; }
+
+        public decimal net_weight_decimal
+        {
+            get
+            {
+                string net_weight_clean = string.Empty;
+                if (net_weight == null)
+                    net_weight_clean = "0.0";
+                else
+                    net_weight_clean = net_weight.Trim().Replace(" EOS", "");
+
+                return decimal.Parse(net_weight_clean);
+            }
+        }
+
+        public decimal cpu_weight_decimal
+        {
+            get
+            {
+                string cpu_weight_clean = string.Empty;
+                if (cpu_weight == null)
+                    cpu_weight_clean = "0.0";
+                else
+                    cpu_weight_clean = cpu_weight.Trim().Replace(" EOS", "");
+
+                return decimal.Parse(cpu_weight_clean);
+            }
+        }
     }
 
     public class EOSAccount_voter_info
