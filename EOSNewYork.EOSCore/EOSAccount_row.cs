@@ -81,6 +81,7 @@ namespace EOSNewYork.EOSCore
         //permissions here
         public EOSAccount_total_resources total_resources { get; set; }
         public EOSAccount_self_delegated_bandwidth self_delegated_bandwidth { get; set; }
+        public EOSAccount_refundRequest refund_request { get; set; }
         public EOSAccount_voter_info voter_info { get; set; }
         public List<EOSAccount_permission> permissions { get; set; }
 
@@ -197,6 +198,43 @@ namespace EOSNewYork.EOSCore
         public string key { get; set; }
         public int weight { get; set; }
 
+    }
+
+
+    public class EOSAccount_refundRequest
+    {
+        public string owner { get; set; }
+        public string request_time { get; set; }
+        public string net_amount { get; set; }
+        public string cpu_amount { get; set; }
+
+        public decimal net_amount_decimal
+        {
+            get
+            {
+                string net_amount_clean = string.Empty;
+                if (net_amount == null)
+                    net_amount_clean = "0.0";
+                else
+                    net_amount_clean = net_amount.Trim().Replace(" EOS", "");
+
+                return decimal.Parse(net_amount_clean);
+            }
+        }
+
+        public decimal cpu_amount_decimal
+        {
+            get
+            {
+                string cpu_amount_clean = string.Empty;
+                if (cpu_amount == null)
+                    cpu_amount_clean = "0.0";
+                else
+                    cpu_amount_clean = cpu_amount.Trim().Replace(" EOS", "");
+
+                return decimal.Parse(cpu_amount_clean);
+            }
+        }
     }
 
 
