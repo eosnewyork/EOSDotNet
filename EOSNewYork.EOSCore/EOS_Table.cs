@@ -36,13 +36,17 @@ namespace EOSNewYork.EOSCore
         }
 
         //This method takes all the subsets that were collected and merges them into a single table. 
-        public List<T> merge()
+        public List<T> merge(String keyName)
         {
 
             foreach (var subset in subsets)
             {
+                //resultList = mainList.Where(p => p.GetType().GetProperty(TargetProperty).GetValue(p,null).ToString() == Value);
                 foreach (var item in subset.rows)
                 {
+                    //ToDo : Add check to exclude the recod if it's already in the list. 
+                    // https://stackoverflow.com/questions/15939044/remove-duplicates-of-a-list-selecting-by-a-property-value-in-c 
+                    var existResult = rows.FirstOrDefault(p => p.GetType().GetProperty(keyName).GetValue(p, null).ToString() == "xxx");
                     rows.Add(item);
                 }
             }
@@ -96,7 +100,7 @@ namespace EOSNewYork.EOSCore
             logger.Debug("Done fetching ALL results. Total duration = {0}", watch.Elapsed);
 
             //Now that we've fetched all the subsets, merge then into one lage resultset and return to the user. 
-            return merge();
+            return merge(keyName);
 
         }
 
