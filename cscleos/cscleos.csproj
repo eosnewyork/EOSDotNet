@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NLog.Config" Version="4.5.7" />
     <PackageReference Include="PowerArgs" Version="3.5.0" />
     <PackageReference Include="ServiceStack.Text" Version="5.1.0" />
   </ItemGroup>

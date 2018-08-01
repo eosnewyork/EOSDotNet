@@ -38,17 +38,24 @@ namespace EOSNewYork.EOSCore
         //This method takes all the subsets that were collected and merges them into a single table. 
         public List<T> merge(String keyName)
         {
+            Dictionary<String, bool> keysInUse = new Dictionary<string, bool>();
+            PropertyInfo propertyInfo = typeof(T).GetProperty(keyName);
 
             foreach (var subset in subsets)
             {
-                //resultList = mainList.Where(p => p.GetType().GetProperty(TargetProperty).GetValue(p,null).ToString() == Value);
                 foreach (var item in subset.rows)
                 {
-                    //ToDo : Add check to exclude the recod if it's already in the list. 
-                    // https://stackoverflow.com/questions/15939044/remove-duplicates-of-a-list-selecting-by-a-property-value-in-c 
-                    var existResult = rows.FirstOrDefault(p => p.GetType().GetProperty(keyName).GetValue(p, null).ToString() == "xxx");
-                    rows.Add(item);
-                }
+                    
+                    var keyValue = propertyInfo.GetValue(item).ToString();
+                    if(!keysInUse.ContainsKey(keyValue))
+                    {
+                        keysInUse.Add(keyValue, true);
+                        rows.Add(item);
+                    } else
+                    {
+                        logger.Debug("Not adding duplicate key {0}", keyValue);
+                    }
+                 }
             }
 
             return rows;

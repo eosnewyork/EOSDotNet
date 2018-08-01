@@ -2,7 +2,7 @@
   "profiles": {
     "cscleos": {
       "commandName": "Project",
-      "commandLineArgs": "getKnownTable namebids csv -f newname,high_bid -d ,"
+      "commandLineArgs": "getKnownTable voters csv"
     }
   }
 }
