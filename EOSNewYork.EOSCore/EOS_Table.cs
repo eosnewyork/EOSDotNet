@@ -65,6 +65,23 @@ namespace EOSNewYork.EOSCore
         //The first record of the next subset fetched is the same as the last recod of the previous subset so we need to trim that. 
         public async Task<List<T>> getAllTableRecordsAsync()
         {
+            /*
+            var target = LogManager.Configuration.FindTargetByName("logconsole");
+            var target = LogManager.Configuration.LoggingRules.
+
+            foreach (var rule in LogManager.Configuration.LoggingRules)
+            {
+                //rule.EnableLoggingForLevel(LogLevel.Error);
+                rule.DisableLoggingForLevel(LogLevel.Info);
+                rule.DisableLoggingForLevel(LogLevel.Debug);
+                
+            }
+            */
+
+            //Call to update existing Loggers created with GetLogger() or 
+            //GetCurrentClassLogger()
+            //LogManager.ReconfigExistingLoggers();
+
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
             int limit = 1000; // The max # of records to get with each request. 

@@ -7,12 +7,15 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using EOSNewYork.EOSCore;
+using NLog;
 
 namespace cscleos
 {
+    [TabCompletion]
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     public class GetProgram
     {
+        static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static Uri HOST = new Uri("https://api.eosnewyork.io");
 
         [HelpHook, ArgShortcut("-?"), ArgDescription("Shows this help")]
@@ -21,6 +24,11 @@ namespace cscleos
         [ArgActionMethod, ArgDescription("Retrieve data from one of the well known EOS tables")]
         public void getKnownTable([ArgRequired]getKnownTableArguments arg)
         {
+
+            logger.Info("Using API: {0}", arg.host);
+
+
+
             var fieldDoesNotExistError = false;
             ServiceStack.Text.CsvConfig.ItemSeperatorString = arg.delimiter;
             switch (arg.table)
@@ -29,7 +37,7 @@ namespace cscleos
                     fieldDoesNotExistError = CheckProperties<EOSVoter_row>(arg);
                     if (!fieldDoesNotExistError)
                     {
-                        List<EOSVoter_row> voters = new EOS_Table<EOSVoter_row>(HOST).getAllTableRecordsAsync().Result;
+                        List<EOSVoter_row> voters = new EOS_Table<EOSVoter_row>(arg.host).getAllTableRecordsAsync().Result;
                         FilterAndOutput(arg, voters);
                     }
                     break;
@@ -130,18 +138,23 @@ namespace cscleos
 
     public class getKnownTableArguments
     {
-        [ArgRequired, ArgDescription("The name of the table"), ArgPosition(1)]
+        [StickyArg]
+        //[ArgDefaultValue("https://api.eosnewyork.io")]
+        [ArgRequired, ArgDescription("URL of the API that will be queried. This is a sticky param and will be remembered after you've used it once."), ArgPosition(1)]
+        public Uri host { get; set; }
+
+        [ArgRequired, ArgDescription("The name of the table"), ArgPosition(2)]
         public TableTypes table { get; set; }
 
         [ArgDefaultValue("csv")]
-        [ArgRequired, ArgDescription("The format of the result. Defaults to Tab Seperated"), ArgPosition(2)]
+        [ArgRequired, ArgDescription("The format of the result. Defaults to Tab Seperated"), ArgPosition(3)]
         public OutputFormats outputFormat { get; set; }
 
         [ArgDefaultValue("\t")]
         [ArgDescription("The characted to use as a delimiter when outputting as a CSV. Default is a tab."), ArgPosition(4)]
         public String delimiter { get; set; }
 
-        [ArgDescription("A comma separated list of fields that should be returned. Default is to return all fields."), ArgPosition(3)]
+        [ArgDescription("A comma separated list of fields that should be returned. Default is to return all fields."), ArgPosition(5)]
         public List<String> fieldList { get; set; }
     }
 

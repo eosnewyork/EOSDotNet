@@ -18,10 +18,10 @@ namespace EOSLibConsole
             //EOSInfo.dumpGlobal();
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
-            //EOSInfo.dumpVoters();
+            EOSInfo.dumpVoters();
             //EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
-            EOSInfo.dumpAccountInfo();
+            //EOSInfo.dumpAccountInfo();
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -33,6 +33,7 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static Uri HOST = new Uri("https://api.eosnewyork.io");
+        static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
 
 
 
@@ -124,7 +125,7 @@ namespace EOSLibConsole
             //List<EOSVoter_row> proxyVoters = new List<EOSVoter_row>();
             StringBuilder tsvoutput = new StringBuilder();
 
-            var tbl = new EOS_Table<EOSVoter_row>(HOST);
+            var tbl = new EOS_Table<EOSVoter_row>(PennStationHOST);
             var voters = tbl.getAllTableRecordsAsync().Result;
             EOSUtil.updateProxyVotersWithProducerInfo(ref voters);
 

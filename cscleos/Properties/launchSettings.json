@@ -2,7 +2,7 @@
   "profiles": {
     "cscleos": {
       "commandName": "Project",
-      "commandLineArgs": "getKnownTable voters csv"
+      "commandLineArgs": "getknowntable -host http://pennstation.eosdocs.io:7001 -table voters -f owner"
     }
   }
 }
