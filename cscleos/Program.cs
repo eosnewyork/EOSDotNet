@@ -27,8 +27,6 @@ namespace cscleos
 
             logger.Info("Using API: {0}", arg.host);
 
-
-
             var fieldDoesNotExistError = false;
             ServiceStack.Text.CsvConfig.ItemSeperatorString = arg.delimiter;
             switch (arg.table)

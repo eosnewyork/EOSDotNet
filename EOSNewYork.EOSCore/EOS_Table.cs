@@ -12,7 +12,9 @@ namespace EOSNewYork.EOSCore
 {
     public class EOS_Table<T> where T : IEOSTable
     {
-
+        // Best to use a global HTTP Client
+        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+        private static HttpClient Client = new HttpClient();
         public List<T> rows = new List<T>();
         public bool more;
 
@@ -21,6 +23,7 @@ namespace EOSNewYork.EOSCore
             return rows;
         }
 
+        System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
         List<EOS_Table<T>> subsets = new List<EOS_Table<T>>();
         Uri _uri;
@@ -46,14 +49,25 @@ namespace EOSNewYork.EOSCore
                 foreach (var item in subset.rows)
                 {
                     
-                    var keyValue = propertyInfo.GetValue(item).ToString();
-                    if(!keysInUse.ContainsKey(keyValue))
+                    //Some results are tables but only have one entry and there's no point in defining a key. If it's blank, then just skip the duplicate check and add the record.
+                    if(keyName != string.Empty)
                     {
-                        keysInUse.Add(keyValue, true);
+                        var keyValue = propertyInfo.GetValue(item).ToString();
+
+                        if (!keysInUse.ContainsKey(keyValue))
+                        {
+                            keysInUse.Add(keyValue, true);
+                            rows.Add(item);
+                        }
+                        else
+                        {
+                            logger.Debug("Not adding duplicate key {0}", keyValue);
+                        }
+
+                    }
+                    else
+                    {
                         rows.Add(item);
-                    } else
-                    {
-                        logger.Debug("Not adding duplicate key {0}", keyValue);
                     }
                  }
             }
@@ -82,7 +96,7 @@ namespace EOSNewYork.EOSCore
             //GetCurrentClassLogger()
             //LogManager.ReconfigExistingLoggers();
 
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            watch.Start();
 
             int limit = 1000; // The max # of records to get with each request. 
             int maxRequests = 100000; // The max number of HTTP API requests to make .. 
@@ -98,7 +112,7 @@ namespace EOSNewYork.EOSCore
 
             while (more)
             {
-                logger.Debug("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3}", limit, t.ToString(), requestCount, lower_bound);
+                logger.Debug("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3} (API: {4}) - {5}", limit, t.ToString(), requestCount, lower_bound, _uri, watch.Elapsed);
 
                 string startkey = string.Empty;
                 var result = await getDataSubset(lower_bound, limit);
@@ -134,7 +148,7 @@ namespace EOSNewYork.EOSCore
 
             //Type listType = typeof(T);
 
-            HttpClient client = new HttpClient();
+            //HttpClient client = new HttpClient();
             HttpResponseMessage response = null;
             string postJSON = string.Empty;
             if (String.IsNullOrEmpty(lower_bound))
@@ -152,7 +166,7 @@ namespace EOSNewYork.EOSCore
             content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
 
             var postdata = new StringContent(content);
-            response = await client.PostAsync(_uri, postdata);
+            response = await Client.PostAsync(_uri, postdata);
             var responseString = await response.Content.ReadAsStringAsync();
             EOS_Table<T> m = JsonConvert.DeserializeObject<EOS_Table<T>>(responseString);
 
