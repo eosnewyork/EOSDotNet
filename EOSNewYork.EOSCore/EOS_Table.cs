@@ -14,7 +14,7 @@ namespace EOSNewYork.EOSCore
     {
         // Best to use a global HTTP Client
         // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        private static HttpClient Client = new HttpClient();
+        //private static HttpClient Client = new HttpClient();
         public List<T> rows = new List<T>();
         public bool more;
 
@@ -63,7 +63,6 @@ namespace EOSNewYork.EOSCore
                         {
                             logger.Debug("Not adding duplicate key {0}", keyValue);
                         }
-
                     }
                     else
                     {
@@ -166,7 +165,7 @@ namespace EOSNewYork.EOSCore
             content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
 
             var postdata = new StringContent(content);
-            response = await Client.PostAsync(_uri, postdata);
+            response = await EOSUtil.Client.PostAsync(_uri, postdata);
             var responseString = await response.Content.ReadAsStringAsync();
             EOS_Table<T> m = JsonConvert.DeserializeObject<EOS_Table<T>>(responseString);
 

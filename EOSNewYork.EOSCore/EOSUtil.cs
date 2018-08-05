@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace EOSNewYork.EOSCore
 {
     public static class EOSUtil
     {
+        public static HttpClient Client = new HttpClient();
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
