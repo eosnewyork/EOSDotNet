@@ -12,7 +12,7 @@ namespace EOSNewYork.EOSCore
 {
     public static class EOSUtil
     {
-        public static HttpClient Client = new HttpClient();
+        //public static HttpClient Client = new HttpClient();
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

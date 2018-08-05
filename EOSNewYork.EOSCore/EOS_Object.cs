@@ -15,9 +15,15 @@ namespace EOSNewYork.EOSCore
         // Best to use a global HTTP Client
         // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
         //private static HttpClient Client = new HttpClient();
+        private static readonly HttpClient httpClient;
         Uri _host;
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        
+
+        static EOS_Object()
+        {
+            httpClient = new HttpClient();
+        }
+
         public EOS_Object(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));
@@ -34,7 +40,7 @@ namespace EOSNewYork.EOSCore
 
             logger.Debug("HTTP GET: {0}", _host);
 
-            response = await EOSUtil.Client.GetAsync(_host);
+            response = await httpClient.GetAsync(_host);
             var responseString = await response.Content.ReadAsStringAsync();
             T m = JsonConvert.DeserializeObject<T>(responseString);
 
