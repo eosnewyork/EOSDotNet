@@ -18,8 +18,8 @@ namespace EOSLibConsole
             //EOSInfo.dumpGlobal();
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
-            EOSInfo.dumpVoters();
-            //EOSInfo.dumpInfo();
+            //EOSInfo.dumpVoters();
+            EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
 

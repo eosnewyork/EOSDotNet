@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace EOSNewYork.EOSCore
 {
     public class EOS_Object<T> where T : IEOAPI
@@ -19,10 +20,13 @@ namespace EOSNewYork.EOSCore
         Uri _host;
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
+        
         static EOS_Object()
         {
             httpClient = new HttpClient();
+
         }
+       
 
         public EOS_Object(Uri host)
         {
