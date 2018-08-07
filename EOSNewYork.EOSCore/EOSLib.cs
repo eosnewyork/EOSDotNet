@@ -25,7 +25,8 @@ namespace EOSNewYork.EOSCore
         public string primaryKey;
         public string contract;
         public string scope;
-        public string table;       
+        public string table;
+        public string key_type = string.Empty;
     }
 
 

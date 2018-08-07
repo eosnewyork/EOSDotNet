@@ -39,7 +39,8 @@ namespace EOSNewYork.EOSCore
                 primaryKey = "owner",
                 contract = "eosio",
                 scope = "eosio",
-                table = "voters"
+                table = "voters",
+                key_type = "name"
             };
             return meta;
         }

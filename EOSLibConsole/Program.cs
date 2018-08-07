@@ -18,8 +18,8 @@ namespace EOSLibConsole
             //EOSInfo.dumpGlobal();
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
-            //EOSInfo.dumpVoters();
-            EOSInfo.dumpInfo();
+            EOSInfo.dumpVoters();
+            //EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
 
@@ -32,7 +32,8 @@ namespace EOSLibConsole
     public static class EOSInfo
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        static Uri HOST = new Uri("http://mainnet.eoscanada.com");
+        //static Uri HOST = new Uri("http://mainnet.eoscanada.com");
+        static Uri HOST = new Uri("http://api.eosnewyork.io");
         static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
 
 

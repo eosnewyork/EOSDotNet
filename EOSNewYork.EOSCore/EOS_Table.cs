@@ -152,23 +152,39 @@ namespace EOSNewYork.EOSCore
         {
 
             //Type listType = typeof(T);
-
             //HttpClient client = new HttpClient();
-            HttpResponseMessage response = null;
-            string postJSON = string.Empty;
-            if (String.IsNullOrEmpty(lower_bound))
-                postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}";
-            else
-                postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}";
-
-            var content = string.Empty;
 
             var rowObjType = (T)Activator.CreateInstance(typeof(T));
             string contract = rowObjType.getMetadata().contract;
             string scope = rowObjType.getMetadata().scope;
             string table = rowObjType.getMetadata().table;
+            string key_type = rowObjType.getMetadata().key_type;
 
-            content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
+            HttpResponseMessage response = null;
+            string postJSON = string.Empty;
+            var content = string.Empty;
+            if (String.IsNullOrEmpty(lower_bound))
+            {
+                postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}";
+                content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
+            }
+            else
+            {
+                if(string.IsNullOrEmpty(key_type))
+                {
+                    postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}";
+                    content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
+                }
+                else
+                {
+                    postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}, \"key_type\":\"{6}\"}}";
+                    content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit, key_type);
+                }
+                
+            }
+
+            //{ "json":true,"code":"eosio","scope":"eosio","table":"voters","table_key":"","lower_bound":"242222222222","upper_bound":"","limit":1000,"key_type":"name","index_position":""}
+
 
             var postdata = new StringContent(content);
             response = await httpClient.PostAsync(_uri, postdata);

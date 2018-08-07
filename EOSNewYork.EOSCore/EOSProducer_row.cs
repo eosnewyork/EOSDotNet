@@ -30,7 +30,8 @@ namespace EOSNewYork.EOSCore
                 primaryKey = "owner",
                 contract = "eosio",
                 scope = "eosio",
-                table = "producers"
+                table = "producers",
+                key_type = "name"
             };
 
             return meta;
