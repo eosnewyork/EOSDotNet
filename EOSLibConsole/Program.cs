@@ -18,10 +18,11 @@ namespace EOSLibConsole
             //EOSInfo.dumpGlobal();
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
-            EOSInfo.dumpVoters();
+            //EOSInfo.dumpVoters();
             //EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
+            EOSInfo.dumpAccountBalance();
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -36,6 +37,12 @@ namespace EOSLibConsole
         static Uri HOST = new Uri("http://api.eosnewyork.io");
         static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
 
+
+        public static void dumpAccountBalance()
+        {
+            var info = new EOS_StringArray<EOSCurrencyBalance_row>(HOST).getAllObjectRecordsAsync(new EOSCurrencyBalance_row.postData() { account = "guzdqmzqgyge", code = "everipediaiq", symbol = "IQ" }).Result;
+            logger.Info("The account had {0} balance records. The 1st (and probably the only balance) is {1}", info.balances.Count, info.balances.First());
+        }
 
 
         public static void dumpAccountInfo()

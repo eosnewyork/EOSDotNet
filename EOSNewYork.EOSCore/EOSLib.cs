@@ -27,6 +27,7 @@ namespace EOSNewYork.EOSCore
         public string scope;
         public string table;
         public string key_type = string.Empty;
+
     }
 
 
@@ -39,5 +40,14 @@ namespace EOSNewYork.EOSCore
     {
         public string uri;
     }
+
+    //////////// Interface used for StringArray /////////////
+
+    public interface IEOStringArray
+    {
+        void setStringArray(List<String> array);
+    }
+
+
 }
 
