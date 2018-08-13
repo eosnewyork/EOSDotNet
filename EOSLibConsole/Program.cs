@@ -22,10 +22,11 @@ namespace EOSLibConsole
             //EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
-            EOSInfo.dumpAccountBalance();
+            //EOSInfo.dumpAccountBalance();
+            EOSInfo.dumpNewKeyPair();
 
             Console.WriteLine("Done");
-            Console.ReadLine();
+            //Console.ReadLine();
 
         }
     }
@@ -34,10 +35,16 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         //static Uri HOST = new Uri("http://mainnet.eoscanada.com");
-        static Uri HOST = new Uri("http://api.eosnewyork.io");
+        static Uri HOST = new Uri("http://dev.cryptolions.io:18888");
         static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
 
-
+        public static void dumpNewKeyPair()
+        {
+            var keypair = EOSKeyManager.GenerateKeyPair();
+            logger.Info("New keypair generated. Private key: {0}, Public key: {1}", keypair.PrivateKey, keypair.PublicKey);
+            logger.Info(keypair.PrivateKey.Length);
+            logger.Info(keypair.PublicKey.Length);
+        }
         public static void dumpAccountBalance()
         {
             var info = new EOS_StringArray<EOSCurrencyBalance_row>(HOST).getAllObjectRecordsAsync(new EOSCurrencyBalance_row.postData() { account = "guzdqmzqgyge", code = "everipediaiq", symbol = "IQ" }).Result;
@@ -47,7 +54,7 @@ namespace EOSLibConsole
 
         public static void dumpAccountInfo()
         {
-            var info = new EOS_Object<EOSAccount_row>(HOST).getAllObjectRecordsAsync(new EOSAccount_row.postData() { account_name = "guzdqmzqgyge" }).Result;
+            var info = new EOS_Object<EOSAccount_row>(HOST).getAllObjectRecordsAsync(new EOSAccount_row.postData() { account_name = "yatendra1" }).Result;
             logger.Info("{0} is currently the returned account name", info.account_name);
             string json = JsonConvert.SerializeObject(info);
             logger.Info("{0}", json);
