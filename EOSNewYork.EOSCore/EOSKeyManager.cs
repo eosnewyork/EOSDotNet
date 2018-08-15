@@ -1,6 +1,6 @@
 ﻿using NLog;
 using Cryptography.ECDSA;
-using Base58 = EOSNewYork.EOSCore.Utilities.Base58;
+using EOSNewYork.EOSCore.Utilities;
 
 namespace EOSNewYork.EOSCore
 {
@@ -12,9 +12,9 @@ namespace EOSNewYork.EOSCore
         {
             EOSKeyPair keyPair = new EOSKeyPair();
             byte[] privateKey = Secp256K1Manager.GenerateRandomKey();
-            keyPair.PrivateKey = Base58.EncodePrivateWif(privateKey);
+            keyPair.PrivateKey = WifUtility.GetPrivateWif(privateKey);
             byte[] publicKey = Secp256K1Manager.GetPublicKey(privateKey, true);
-            keyPair.PublicKey = Base58.EncodePublicWif(publicKey, "EOS");
+            keyPair.PublicKey = WifUtility.GetPublicWif(publicKey, "EOS");
             return keyPair;
         }
     }
