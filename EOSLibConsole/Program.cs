@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using NLog;
 using EOSNewYork.EOSCore;
+using EOSNewYork.EOSCore.Params;
 using Newtonsoft.Json;
 
 namespace EOSLibConsole
@@ -23,7 +24,9 @@ namespace EOSLibConsole
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
             //EOSInfo.dumpAccountBalance();
-            EOSInfo.dumpNewKeyPair();
+            //EOSInfo.dumpNewKeyPair();
+            //EOSInfo.dumpAbiJsonToBin();
+            EOSInfo.dumpBlock();
 
             Console.WriteLine("Done");
             //Console.ReadLine();
@@ -44,6 +47,22 @@ namespace EOSLibConsole
             logger.Info("New keypair generated. Private key: {0}, Public key: {1}", keypair.PrivateKey, keypair.PublicKey);
             logger.Info(keypair.PrivateKey.Length);
             logger.Info(keypair.PublicKey.Length);
+        }
+        public static void dumpBlock()
+        {
+            string blockNumber = "100";
+            var info = new EOS_Object<EOSBlock_row>(HOST).getAllObjectRecordsAsync(new EOSBlock_row.postData() { block_num_or_id = blockNumber }).Result;
+            logger.Info("Block {0} recieved for block num {1}", "", blockNumber);
+        }
+        public static void dumpAbiJsonToBin()
+        {
+            string _code = "eosio.token", _action = "transfer", _memo = "";
+            AbiJsonToBinArgs _args = new AbiJsonToBinArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1 EOS", memo = _memo };
+            var info = new EOS_Object<EOSAbiJsonToBin_row>(HOST).getAllObjectRecordsAsync(new EOSAbiJsonToBin_row.postData() { code = _code, action = _action, args = _args }).Result;
+            logger.Info("For code {0}, action {1}, args {2} and memo {3} recieved bin {4}", _code, _action, _args, _memo, info.binargs);
+
+            var info2 = new EOS_Object<EOSAbiBinToJson_row>(HOST).getAllObjectRecordsAsync(new EOSAbiBinToJson_row.postData() { code = _code, action = _action, binargs = info.binargs }).Result;
+            logger.Info("Received args json {0}", JsonConvert.SerializeObject(info2.args));
         }
         public static void dumpAccountBalance()
         {
