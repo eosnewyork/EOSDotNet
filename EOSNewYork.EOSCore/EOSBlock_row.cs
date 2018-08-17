@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EOSNewYork.EOSCore.Params;
+using EOSNewYork.EOSCore.Serialization;
+using Newtonsoft.Json;
+
 namespace EOSNewYork.EOSCore
 {
     public class EOSBlock_row : IEOAPI
@@ -75,15 +77,8 @@ namespace EOSNewYork.EOSCore
         public int max_net_usage_words { get; set; }
         public int max_cpu_usage_ms { get; set; }
         public int delay_sec { get; set; }
-        public List<EOSContextFreeAction> context_free_actions { get; set; }
+        public List<EOSAction> context_free_actions { get; set; }
         public List<EOSAction> actions { get; set; }
-    }
-    public class EOSContextFreeAction
-    {
-        public string account { get; set; }
-        public string name { get; set; }
-        public List<EOSAuthorization> authorization { get; set; }
-        public string data { get; set; }
     }
     public class EOSAuthorization
     {
@@ -92,11 +87,19 @@ namespace EOSNewYork.EOSCore
     }
     public class EOSAction
     {
+        public string account { get; set; }
+        public string name { get; set; }
+        public List<EOSAuthorization> authorization { get; set; }
+        [JsonConverter(typeof(JsonStringConverter))]
+        public string data { get; set; }
+        public string hex_data { get; set; }
+    }
+    public class EOSActionData
+    {
         public string creator { get; set; }
         public string name { get; set; }
         public EOSRole owner { get; set; }
         public EOSRole active { get; set; }
-        public string hex_data { get; set; }
     }
     public class EOSRole
     {
