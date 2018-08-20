@@ -12,16 +12,16 @@ namespace EOSNewYork.EOSCore
     {
         public string timestamp { get; set; }
         public string producer { get; set; }
-        public int confirmed { get; set; }
+        public ushort confirmed { get; set; }
         public string previous { get; set; }
         public string transaction_mroot { get; set; }
         public string action_mroot { get; set; }
-        public int schedule_version { get; set; }
+        public uint schedule_version { get; set; }
         public string producer_signature { get; set; }
         public List<EOSTransaction> transactions { get; set; }
         public string id { get; set; }
-        public long block_num { get; set; }
-        public long ref_block_prefix { get; set; }
+        public uint block_num { get; set; }
+        public uint ref_block_prefix { get; set; }
         public EOSAPIMetadata getMetadata()
         {
             var meta = new EOSAPIMetadata
@@ -40,8 +40,8 @@ namespace EOSNewYork.EOSCore
     public class EOSTransaction
     {
         public string status { get; set; }
-        public int cpu_usage_us { get; set; }
-        public int net_usage_words { get; set; }
+        public uint cpu_usage_us { get; set; }
+        public uint net_usage_words { get; set; }
         public EOSTrx trx { get; set; }
         
     }
@@ -58,11 +58,11 @@ namespace EOSNewYork.EOSCore
     public class EOSTransactionInner
     {
         public string expiration { get; set; }
-        public long ref_block_num { get; set; }
-        public long ref_block_prefix { get; set; }
-        public int max_net_usage_words { get; set; }
-        public int max_cpu_usage_ms { get; set; }
-        public int delay_sec { get; set; }
+        public ushort ref_block_num { get; set; }
+        public uint ref_block_prefix { get; set; }
+        public uint max_net_usage_words { get; set; }
+        public byte max_cpu_usage_ms { get; set; }
+        public uint delay_sec { get; set; }
         public List<EOSAction> context_free_actions { get; set; }
         public List<EOSAction> actions { get; set; }
     }
