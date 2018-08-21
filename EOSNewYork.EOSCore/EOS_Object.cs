@@ -23,8 +23,12 @@ namespace EOSNewYork.EOSCore
         
         static EOS_Object()
         {
-            httpClient = new HttpClient();
 
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            httpClient = new HttpClient(handler);
         }
        
 

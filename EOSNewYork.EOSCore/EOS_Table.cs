@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -21,7 +22,12 @@ namespace EOSNewYork.EOSCore
 
         static EOS_Table()
         {
-            httpClient = new HttpClient();
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            httpClient = new HttpClient(handler);
         }
 
         public List<T> getRows()
