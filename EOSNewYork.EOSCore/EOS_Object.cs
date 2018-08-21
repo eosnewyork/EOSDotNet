@@ -66,7 +66,7 @@ namespace EOSNewYork.EOSCore
             logger.Debug("HTTP POST: {0}, DATA: {1}", _host, json);
 
             response = await client.PostAsync(_host,x);
-
+            
             if(response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception("API Call did not respond with 200 OK");
