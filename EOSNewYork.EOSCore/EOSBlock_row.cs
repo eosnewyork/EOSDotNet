@@ -11,6 +11,13 @@ namespace EOSNewYork.EOSCore
     public class EOSBlock_row : IEOAPI
     {
         public string timestamp { get; set; }
+        public DateTime timestamp_datetime
+        {
+            get
+            {
+                return DateTime.SpecifyKind((DateTime.Parse(timestamp)), DateTimeKind.Utc);
+            }
+        }
         public string producer { get; set; }
         public ushort confirmed { get; set; }
         public string previous { get; set; }
@@ -75,9 +82,10 @@ namespace EOSNewYork.EOSCore
     {
         public string account { get; set; }
         public string name { get; set; }
-        public List<EOSAuthorization> authorization { get; set; }
-        [JsonConverter(typeof(JsonStringConverter))]
+        public EOSAuthorization[] authorization { get; set; }
+        [JsonConverter(typeof(JsonString))]
         public string data { get; set; }
+
         public string hex_data { get; set; }
     }
 }

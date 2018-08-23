@@ -23,12 +23,8 @@ namespace EOSNewYork.EOSCore
         
         static EOS_Object()
         {
+            httpClient = new HttpClient();
 
-            HttpClientHandler handler = new HttpClientHandler()
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-            httpClient = new HttpClient(handler);
         }
        
 
@@ -71,7 +67,7 @@ namespace EOSNewYork.EOSCore
 
             response = await client.PostAsync(_host,x);
             
-            if(response.StatusCode != HttpStatusCode.OK)
+            if(response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
             {
                 throw new Exception("API Call did not respond with 200 OK");
             }
