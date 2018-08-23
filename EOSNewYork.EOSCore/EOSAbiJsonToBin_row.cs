@@ -24,7 +24,7 @@ namespace EOSNewYork.EOSCore
         {
             public string code { get; set; }
             public string action { get; set; }
-            public AbiJsonToBinArgs args { get; set; }
+            public object args { get; set; }
         }
     }
 }

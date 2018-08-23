@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EOSNewYork.EOSCore.Params
 {
-    public class AbiJsonToBinArgs
+    public class TransferArgs
     {
         public string from { get; set; }
         public string to { get; set; }

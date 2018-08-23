@@ -7,7 +7,11 @@ using System.IO;
 using NLog;
 using EOSNewYork.EOSCore;
 using EOSNewYork.EOSCore.Params;
+using EOSNewYork.EOSCore.Serialization;
+using EOSNewYork.EOSCore.Utilities;
+using Action = EOSNewYork.EOSCore.Params.Action;
 using Newtonsoft.Json;
+using Cryptography.ECDSA;
 
 namespace EOSLibConsole
 {
@@ -19,7 +23,7 @@ namespace EOSLibConsole
             //EOSInfo.dumpGlobal();
             //EOSInfo.dumpNameVotes();
             //EOSInfo.dumpProducers();
-            EOSInfo.dumpVoters();
+            //EOSInfo.dumpVoters();
             //EOSInfo.dumpInfo();
             //EOSInfo.dumpProduerSchedule();
             //EOSInfo.dumpAccountInfo();
@@ -27,6 +31,7 @@ namespace EOSLibConsole
             //EOSInfo.dumpNewKeyPair();
             //EOSInfo.dumpAbiJsonToBin();
             //EOSInfo.dumpBlock();
+            EOSInfo.testTransaction();
 
             Console.WriteLine("Done");
             //Console.ReadLine();
@@ -37,11 +42,75 @@ namespace EOSLibConsole
     public static class EOSInfo
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        //static Uri HOST = new Uri("http://mainnet.eoscanada.com");
-        //static Uri HOST = new Uri("http://dev.cryptolions.io:18888");
-        static Uri HOST = new Uri("http://api.eosnewyork.io");
-        //static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
+        static Uri HOST = new Uri("http://dev.cryptolions.io:18888");
+        static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
+        static string privateKeyWIF = "";
+            
+        public static void testTransaction()
+        {
+            string _accountName = "yatendra1", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "";
+            //prepare action object
+            Action action = new Action(){ 
+                account = new AccountName(_accountName),
+                name = new ActionName(_action),
+                authorization = new[]{
+                    new Authorization{
+                        actor = new AccountName(_accountName),
+                        permission = new PermissionName(_permissionName)
+                    }
+                }
+            };
+            
+            //prepare arguments to be passed to action
+            TransferArgs _args = new TransferArgs(){ from = _accountName, to = _accountName, quantity = "1 EOS", memo = _memo };
+            //BuyRamArgs _args = new BuyRamArgs(){ payer = _accountName, receiver = _accountName, quant = "0.001 EOS" };
+            
+            //convert action arguments to binary and save it in action.data
+            var abiJsonToBin = new EOS_Object<EOSAbiJsonToBin_row>(HOST).getAllObjectRecordsAsync(new EOSAbiJsonToBin_row.postData() { code = _code, action = _action, args = _args }).Result;
+            action.data = new BinaryString(abiJsonToBin.binargs);
+            
+            //get info
+            var info = new EOS_Object<EOSInfo_row>(HOST).getAllObjectRecordsAsync().Result;
+            
+            //get head block
+            var block = new EOS_Object<EOSBlock_row>(HOST).getAllObjectRecordsAsync(new EOSBlock_row.postData() { block_num_or_id = info.head_block_id }).Result;
+            
+            //prepare transaction object
+            var transaction = new Transaction {
+                actions = new [] { action },
+                ref_block_num = (ushort)(block.block_num & 0xffff),
+                ref_block_prefix = block.ref_block_prefix,
+                expiration = new TimePointSec(block.timestamp_datetime.AddSeconds(120))
+            };
+            
+            //pack the transaction
+            var packedTransaction = new PackingSerializer().Serialize<Transaction>(transaction);
+            
+            //get chain id
+            var chainId = Hex.HexToBytes(info.chain_id);
+            
+            //combine chainId, packed transaction and 32 empty bytes
+            var message = new byte[chainId.Length + packedTransaction.Length + 32];
+            Array.Copy(chainId, message, chainId.Length);
+            Array.Copy(packedTransaction, 0, message, chainId.Length, packedTransaction.Length);
+            
+            //calculate message hash
+            var messageHash = Sha256Manager.GetHash(message);
 
+            //get private keys in WIF format
+            List<byte[]> privateKeys = new List<byte[]> { WifUtility.DecodePrivateWif(privateKeyWIF) };
+            
+            //get signatures for each provate key by signing message hash with private key
+            string[] signatures = new string[privateKeys.Count];
+            for(int i = 0; i< privateKeys.Count; i++)
+            {
+                signatures[i] = WifUtility.EncodeSignature(Secp256K1Manager.SignCompressedCompact(messageHash, privateKeys[i]));
+            }
+
+            //push transaction
+            var transactionResult = new EOS_Object<EOSPushTransaction>(HOST).getAllObjectRecordsAsync(new EOSPushTransaction.postData() { packed_trx = Hex.ToString(packedTransaction), signatures = signatures, packed_context_free_data = string.Empty, compression = "none" }).Result;
+            Console.WriteLine(transactionResult.transaction_id);
+        }
         public static void dumpNewKeyPair()
         {
             var keypair = EOSKeyManager.GenerateKeyPair();
@@ -58,10 +127,10 @@ namespace EOSLibConsole
         public static void dumpAbiJsonToBin()
         {
             string _code = "eosio.token", _action = "transfer", _memo = "";
-            AbiJsonToBinArgs _args = new AbiJsonToBinArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1 EOS", memo = _memo };
+            TransferArgs _args = new TransferArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1 EOS", memo = _memo };
             var info = new EOS_Object<EOSAbiJsonToBin_row>(HOST).getAllObjectRecordsAsync(new EOSAbiJsonToBin_row.postData() { code = _code, action = _action, args = _args }).Result;
             logger.Info("For code {0}, action {1}, args {2} and memo {3} recieved bin {4}", _code, _action, _args, _memo, info.binargs);
-
+       
             var info2 = new EOS_Object<EOSAbiBinToJson_row>(HOST).getAllObjectRecordsAsync(new EOSAbiBinToJson_row.postData() { code = _code, action = _action, binargs = info.binargs }).Result;
             logger.Info("Received args json {0}", JsonConvert.SerializeObject(info2.args));
         }

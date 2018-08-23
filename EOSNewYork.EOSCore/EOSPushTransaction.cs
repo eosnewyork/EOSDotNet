@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Params;
 namespace EOSNewYork.EOSCore
 {
-    public class EOSAbiBinToJson_row : IEOAPI
+    public class EOSPushTransaction : IEOAPI
     {
-        public object args { get; set; }
+        public string transaction_id { get; set; }
         
         public EOSAPIMetadata getMetadata()
         {
             var meta = new EOSAPIMetadata
             {
-                uri = "/v1/chain/abi_bin_to_json"
+                uri = "/v1/chain/push_transaction"
             };
 
             return meta;
@@ -22,9 +22,10 @@ namespace EOSNewYork.EOSCore
 
         public class postData
         {
-            public string code { get; set; }
-            public string action { get; set; }
-            public string binargs { get; set; }
+            public string packed_trx { get; set; }
+            public string packed_context_free_data { get; set; }
+            public string compression { get; set; }
+            public string[] signatures { get; set; }
         }
     }
 }
