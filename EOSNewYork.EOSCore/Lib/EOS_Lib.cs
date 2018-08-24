@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Lib
 {
 
     //This interface must be implemented by any class wishing to be treated as a row of an EOS table. 

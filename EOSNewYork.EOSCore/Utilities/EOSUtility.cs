@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Response.Table;
+using EOSNewYork.EOSCore.Lib;
 
 namespace EOSNewYork.EOSCore.Utilities
 {

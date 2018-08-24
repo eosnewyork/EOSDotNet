@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Lib
 {
-    public class EOS_Object<T> where T : IEOAPI
+    public class EOS_StringArray<T> where T : IEOAPI, IEOStringArray
     {
         // Best to use a global HTTP Client
         // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
@@ -21,14 +21,13 @@ namespace EOSNewYork.EOSCore
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         
-        static EOS_Object()
+        static EOS_StringArray()
         {
             httpClient = new HttpClient();
 
         }
        
-
-        public EOS_Object(Uri host)
+        public EOS_StringArray(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));
             var meta = ObjType.GetMetaData();
@@ -46,7 +45,11 @@ namespace EOSNewYork.EOSCore
 
             response = await httpClient.GetAsync(_host);
             var responseString = await response.Content.ReadAsStringAsync();
-            T m = JsonConvert.DeserializeObject<T>(responseString);
+
+            var values = JsonConvert.DeserializeObject<List<string>>(responseString);
+
+            T m = (T)Activator.CreateInstance(typeof(T));
+            m.SetStringArray(values);
 
             result = m;
             return (T)result;
@@ -66,13 +69,17 @@ namespace EOSNewYork.EOSCore
             logger.Debug("HTTP POST: {0}, DATA: {1}", _host, json);
 
             response = await client.PostAsync(_host,x);
-            
-            if(response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
+
+            if(response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception("API Call did not respond with 200 OK");
             }
             var responseString = await response.Content.ReadAsStringAsync();
-            T m = JsonConvert.DeserializeObject<T>(responseString);
+
+            var values = JsonConvert.DeserializeObject<List<string>>(responseString);
+
+            T m = (T)Activator.CreateInstance(typeof(T));
+            m.SetStringArray(values);
 
             result = m;
             return (T)result;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Utilities;
+using EOSNewYork.EOSCore.Lib;
 
 namespace EOSNewYork.EOSCore.Response.Table
 {

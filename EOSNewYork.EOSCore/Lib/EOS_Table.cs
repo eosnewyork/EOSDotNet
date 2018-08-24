@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Lib
 {
     public class EOS_Table<T> where T : IEOSTable
     {

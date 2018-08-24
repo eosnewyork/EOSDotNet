@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Serialization;
 using Newtonsoft.Json;
+using EOSNewYork.EOSCore.Lib;
 
 namespace EOSNewYork.EOSCore.Response.API
 {

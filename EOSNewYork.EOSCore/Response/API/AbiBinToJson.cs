@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Params;
+using EOSNewYork.EOSCore.Lib;
 
 namespace EOSNewYork.EOSCore.Response.API
 {
