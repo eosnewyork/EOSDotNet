@@ -1,16 +1,16 @@
 ﻿using NLog;
 using Cryptography.ECDSA;
-using EOSNewYork.EOSCore.Utilities;
+using EOSNewYork.EOSCore.Response;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Utilities
 {
-    public class EOSKeyManager
+    public class KeyManager
     {
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         
-        public static EOSKeyPair GenerateKeyPair()
+        public static KeyPair GenerateKeyPair()
         {
-            EOSKeyPair keyPair = new EOSKeyPair();
+            KeyPair keyPair = new KeyPair();
             byte[] privateKey = Secp256K1Manager.GenerateRandomKey();
             keyPair.PrivateKey = WifUtility.GetPrivateWif(privateKey);
             byte[] publicKey = Secp256K1Manager.GetPublicKey(privateKey, true);

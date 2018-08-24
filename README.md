@@ -101,13 +101,13 @@ In the below example:
 - TABLE_ROW_TYPE = This is a class definitiion of the table you're interested in. 
 
 ```
-var result = new EOS_Table<TABLE_ROW_TYPE>(HOST).getAllTableRecordsAsync().Result;
+var result = new EOS_Table<TABLE_ROW_TYPE>(HOST).GetRowsFromAPIAsync().Result;
 ```
 
 Example working with the result
 ```
 
-var producers = new EOS_Table<EOSProducer_row>(HOST).getAllTableRecordsAsync().Result;
+var producers = new EOS_Table<ProducerRow>(HOST).GetRowsFromAPIAsync().Result;
 foreach (var _producer in producers)
 {
     string line = string.Format("{0}\t{1}\t{2}\t{3}\t{4}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url);

@@ -7,6 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using EOSNewYork.EOSCore;
+using EOSNewYork.EOSCore.Response.Table;
+using EOSNewYork.EOSCore.Utilities;
+
 using NLog;
 
 namespace cscleos
@@ -32,34 +35,34 @@ namespace cscleos
             switch (arg.table)
             {
                 case TableTypes.voters:
-                    fieldDoesNotExistError = CheckProperties<EOSVoter_row>(arg);
+                    fieldDoesNotExistError = CheckProperties<VoterRow>(arg);
                     if (!fieldDoesNotExistError)
                     {
-                        List<EOSVoter_row> voters = new EOS_Table<EOSVoter_row>(arg.host).getAllTableRecordsAsync().Result;
+                        List<VoterRow> voters = new EOS_Table<VoterRow>(arg.host).GetRowsFromAPIAsync().Result;
                         FilterAndOutput(arg, voters);
                     }
                     break;
                 case TableTypes.producers:
-                    fieldDoesNotExistError = CheckProperties<EOSProducer_row>(arg);
+                    fieldDoesNotExistError = CheckProperties<ProducerRow>(arg);
                     if (!fieldDoesNotExistError)
                     {
-                        List<EOSProducer_row> producers = new EOS_Table<EOSProducer_row>(HOST).getAllTableRecordsAsync().Result;
+                        List<ProducerRow> producers = new EOS_Table<ProducerRow>(HOST).GetRowsFromAPIAsync().Result;
                         FilterAndOutput(arg, producers);
                     }
                     break;
                 case TableTypes.global:
-                    fieldDoesNotExistError = CheckProperties<EOSGlobal_row>(arg);
+                    fieldDoesNotExistError = CheckProperties<GlobalRow>(arg);
                     if (!fieldDoesNotExistError)
                     {
-                        List<EOSGlobal_row> gloabl = new EOS_Table<EOSGlobal_row>(HOST).getAllTableRecordsAsync().Result;
-                        FilterAndOutput(arg, gloabl);
+                        List<GlobalRow> global = new EOS_Table<GlobalRow>(HOST).GetRowsFromAPIAsync().Result;
+                        FilterAndOutput(arg, global);
                     }
                     break;
                 case TableTypes.namebids:
-                    fieldDoesNotExistError = CheckProperties<EOSNamebids_row>(arg);
+                    fieldDoesNotExistError = CheckProperties<NameBidsRow>(arg);
                     if(!fieldDoesNotExistError)
                     {
-                        List<EOSNamebids_row> namebids = new EOS_Table<EOSNamebids_row>(HOST).getAllTableRecordsAsync().Result;
+                        List<NameBidsRow> namebids = new EOS_Table<NameBidsRow>(HOST).GetRowsFromAPIAsync().Result;
                         FilterAndOutput(arg, namebids);
                     }
                     break;
@@ -104,7 +107,7 @@ namespace cscleos
                     }
                 }               
 
-                filteredFieldObject = EOSUtil.filterFields(arg.fieldList, queryResult);
+                filteredFieldObject = EOSUtility.FilterFields(arg.fieldList, queryResult);
             }
                 
             if (arg.outputFormat == OutputFormats.json)

@@ -30,11 +30,11 @@ namespace EOSNewYork.EOSCore
         public EOS_StringArray(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));
-            var meta = ObjType.getMetadata();
+            var meta = ObjType.GetMetaData();
             _host = new Uri(host, meta.uri);
         }
         
-        public async Task<T> getAllObjectRecordsAsync()
+        public async Task<T> GetObjectsFromAPIAsync()
         {
             object result = null;
 
@@ -49,13 +49,13 @@ namespace EOSNewYork.EOSCore
             var values = JsonConvert.DeserializeObject<List<string>>(responseString);
 
             T m = (T)Activator.CreateInstance(typeof(T));
-            m.setStringArray(values);
+            m.SetStringArray(values);
 
             result = m;
             return (T)result;
         }
 
-        public async Task<T> getAllObjectRecordsAsync(object postData)
+        public async Task<T> GetObjectsFromAPIAsync(object postData)
         {
             
             object result = null;
@@ -79,7 +79,7 @@ namespace EOSNewYork.EOSCore
             var values = JsonConvert.DeserializeObject<List<string>>(responseString);
 
             T m = (T)Activator.CreateInstance(typeof(T));
-            m.setStringArray(values);
+            m.SetStringArray(values);
 
             result = m;
             return (T)result;

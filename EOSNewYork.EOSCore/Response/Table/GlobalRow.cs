@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.Table
 {
-    public class EOSGlobal_row : IEOSTable
+    public class GlobalRow : IEOSTable
     {
         public string total_producer_vote_weight { get; set; }
 
-        public EOSTableMetadata getMetadata()
+        public EOSTableMetadata GetMetaData()
         {
             var meta = new EOSTableMetadata
             {
@@ -21,6 +21,5 @@ namespace EOSNewYork.EOSCore
             };
             return meta;
         }
-
     }
 }

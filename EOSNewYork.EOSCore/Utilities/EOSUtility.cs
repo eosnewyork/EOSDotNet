@@ -7,12 +7,12 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using EOSNewYork.EOSCore.Response.Table;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Utilities
 {
-    public static class EOSUtil
+    public static class EOSUtility
     {
-        //public static HttpClient Client = new HttpClient();
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -31,7 +31,7 @@ namespace EOSNewYork.EOSCore
             return epoch.AddSeconds(unixTime);
         }
 
-        public static void updateProxyVotersWithProducerInfo(ref List<EOSVoter_row> voters)
+        public static void UpdateProxyVotersWithProducerInfo(ref List<VoterRow> voters)
         {
 
             //logger.Debug("Correting proxy voter data");
@@ -54,7 +54,7 @@ namespace EOSNewYork.EOSCore
 
         }
 
-        public static decimal eosToDecimal(string eosString)
+        public static decimal EosToDecimal(string eosString)
         {
 
                 var clean_core_liquid_balance = string.Empty;
@@ -68,7 +68,7 @@ namespace EOSNewYork.EOSCore
         }
 
 
-        public static List<dynamic> filterFields<T>(List<string> properties, List<T> data) where T: IEOSTable
+        public static List<dynamic> FilterFields<T>(List<string> properties, List<T> data) where T: IEOSTable
         {
             List<dynamic> objList = new List<dynamic>();
 

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Params;
-namespace EOSNewYork.EOSCore
+
+namespace EOSNewYork.EOSCore.Response.API
 {
-    public class EOSPushTransaction : IEOAPI
+    public class PushTransaction : IEOAPI
     {
         public string transaction_id { get; set; }
         
-        public EOSAPIMetadata getMetadata()
+        public EOSAPIMetadata GetMetaData()
         {
             var meta = new EOSAPIMetadata
             {
@@ -18,14 +19,6 @@ namespace EOSNewYork.EOSCore
             };
 
             return meta;
-        }
-
-        public class postData
-        {
-            public string packed_trx { get; set; }
-            public string packed_context_free_data { get; set; }
-            public string compression { get; set; }
-            public string[] signatures { get; set; }
         }
     }
 }

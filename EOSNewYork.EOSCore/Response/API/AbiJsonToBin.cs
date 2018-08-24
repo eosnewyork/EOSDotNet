@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Params;
-namespace EOSNewYork.EOSCore
+
+namespace EOSNewYork.EOSCore.Response.API
 {
-    public class EOSAbiJsonToBin_row : IEOAPI
+    public class AbiJsonToBin : IEOAPI
     {
         public string binargs { get; set; }
         
-        public EOSAPIMetadata getMetadata()
+        public EOSAPIMetadata GetMetaData()
         {
             var meta = new EOSAPIMetadata
             {
@@ -18,13 +19,6 @@ namespace EOSNewYork.EOSCore
             };
 
             return meta;
-        }
-
-        public class postData
-        {
-            public string code { get; set; }
-            public string action { get; set; }
-            public object args { get; set; }
         }
     }
 }

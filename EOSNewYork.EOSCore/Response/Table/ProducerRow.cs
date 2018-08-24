@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.Table
 {
-    public class EOSProducer_row : IEOSTable
+    public class ProducerRow : IEOSTable
     {
         public string owner { get; set; }
         public string total_votes { get; set; }
@@ -22,7 +22,7 @@ namespace EOSNewYork.EOSCore
                 return double.Parse(total_votes);
             }
         }
-        public EOSTableMetadata getMetadata()
+        public EOSTableMetadata GetMetaData()
         {
 
             var meta = new EOSTableMetadata
