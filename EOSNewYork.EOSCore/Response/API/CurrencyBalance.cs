@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.API
 {
-    public class EOSCurrencyBalance_row : IEOAPI, IEOStringArray
+    public class CurrencyBalance : IEOAPI, IEOStringArray
     {
         public List<String> balances { get; set; }
         
-        public EOSAPIMetadata getMetadata()
+        public EOSAPIMetadata GetMetaData()
         {
             var meta = new EOSAPIMetadata
             {
@@ -20,16 +20,9 @@ namespace EOSNewYork.EOSCore
             return meta;
         }
 
-        public void setStringArray(List<String> array)
+        public void SetStringArray(List<String> array)
         {
             balances = array;
-        }
-
-        public class postData
-        {
-            public string account { get; set; }
-            public string code { get; set; }
-            public string symbol { get; set; }
         }
     }
 }

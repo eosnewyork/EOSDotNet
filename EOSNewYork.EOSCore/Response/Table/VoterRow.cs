@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.Table
 {
-    public class EOSVoter_row : IEOSTable
+    public class VoterRow : IEOSTable
     {
         public string owner { get; set; }
         public string proxy { get; set; }
@@ -32,7 +32,7 @@ namespace EOSNewYork.EOSCore
             }
         }
 
-        public EOSTableMetadata getMetadata()
+        public EOSTableMetadata GetMetaData()
         {
             var meta = new EOSTableMetadata
             {
@@ -44,6 +44,5 @@ namespace EOSNewYork.EOSCore
             };
             return meta;
         }
-
     }
 }

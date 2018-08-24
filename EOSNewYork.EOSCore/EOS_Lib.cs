@@ -16,7 +16,7 @@ namespace EOSNewYork.EOSCore
     //This interface must be implemented by any class wishing to be treated as a row of an EOS table. 
     public interface IEOSTable
     {
-        EOSTableMetadata getMetadata();
+        EOSTableMetadata GetMetaData();
     }
 
     //Defines the properties of a table. Any table implementing IEOSTable will need to return on of these in order to provide details of where table exists on the EOS chain. 
@@ -33,7 +33,7 @@ namespace EOSNewYork.EOSCore
 
     public interface IEOAPI
     {
-        EOSAPIMetadata getMetadata();
+        EOSAPIMetadata GetMetaData();
     }
 
     public class EOSAPIMetadata
@@ -45,7 +45,7 @@ namespace EOSNewYork.EOSCore
 
     public interface IEOStringArray
     {
-        void setStringArray(List<String> array);
+        void SetStringArray(List<String> array);
     }
 
 

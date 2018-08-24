@@ -24,7 +24,7 @@ namespace EOSNewYork.EOSCore
             httpClient = new HttpClient();
         }
 
-        public List<T> getRows()
+        public List<T> GetRows()
         {
             return rows;
         }
@@ -45,7 +45,7 @@ namespace EOSNewYork.EOSCore
         }
 
         //This method takes all the subsets that were collected and merges them into a single table. 
-        public List<T> merge(String keyName)
+        public List<T> Merge(String keyName)
         {
             Dictionary<String, bool> keysInUse = new Dictionary<string, bool>();
             PropertyInfo propertyInfo = typeof(T).GetProperty(keyName);
@@ -82,21 +82,8 @@ namespace EOSNewYork.EOSCore
 
         //This calls getDataSubset until there is no more data to fetch in the table. 
         //The first record of the next subset fetched is the same as the last recod of the previous subset so we need to trim that. 
-        public async Task<List<T>> getAllTableRecordsAsync()
+        public async Task<List<T>> GetRowsFromAPIAsync()
         {
-            /*
-            var target = LogManager.Configuration.FindTargetByName("logconsole");
-            var target = LogManager.Configuration.LoggingRules.
-
-            foreach (var rule in LogManager.Configuration.LoggingRules)
-            {
-                //rule.EnableLoggingForLevel(LogLevel.Error);
-                rule.DisableLoggingForLevel(LogLevel.Info);
-                rule.DisableLoggingForLevel(LogLevel.Debug);
-                
-            }
-            */
-
             //Call to update existing Loggers created with GetLogger() or 
             //GetCurrentClassLogger()
             //LogManager.ReconfigExistingLoggers();
@@ -112,7 +99,7 @@ namespace EOSNewYork.EOSCore
 
             //We need to know what the name of the primary key propery is, as we'll use this field value and then use it as the lower_bound in future requests.
             var rowObjType = (T)Activator.CreateInstance(typeof(T));
-            string keyName = rowObjType.getMetadata().primaryKey;
+            string keyName = rowObjType.GetMetaData().primaryKey;
 
 
             while (more)
@@ -120,7 +107,7 @@ namespace EOSNewYork.EOSCore
                 logger.Debug("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3} (API: {4}) - {5}", limit, t.ToString(), requestCount, lower_bound, _uri, watch.Elapsed);
 
                 string startkey = string.Empty;
-                var result = await getDataSubset(lower_bound, limit);
+                var result = await GetDataSubset(lower_bound, limit);
 
                 more = result.more;
                 subsets.Add(result);
@@ -143,22 +130,22 @@ namespace EOSNewYork.EOSCore
             logger.Debug("Done fetching ALL results. Total duration = {0}", watch.Elapsed);
 
             //Now that we've fetched all the subsets, merge then into one lage resultset and return to the user. 
-            return merge(keyName);
+            return Merge(keyName);
 
         }
 
         //This method fetches a specific subset of data. 
-        async Task<EOS_Table<T>> getDataSubset(string lower_bound, int limit)
+        async Task<EOS_Table<T>> GetDataSubset(string lower_bound, int limit)
         {
 
             //Type listType = typeof(T);
             //HttpClient client = new HttpClient();
 
             var rowObjType = (T)Activator.CreateInstance(typeof(T));
-            string contract = rowObjType.getMetadata().contract;
-            string scope = rowObjType.getMetadata().scope;
-            string table = rowObjType.getMetadata().table;
-            string key_type = rowObjType.getMetadata().key_type;
+            string contract = rowObjType.GetMetaData().contract;
+            string scope = rowObjType.GetMetaData().scope;
+            string table = rowObjType.GetMetaData().table;
+            string key_type = rowObjType.GetMetaData().key_type;
 
             HttpResponseMessage response = null;
             string postJSON = string.Empty;
@@ -193,6 +180,5 @@ namespace EOSNewYork.EOSCore
 
             return m;
         }
-
     }
 }

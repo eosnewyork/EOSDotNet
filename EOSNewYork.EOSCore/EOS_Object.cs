@@ -31,11 +31,11 @@ namespace EOSNewYork.EOSCore
         public EOS_Object(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));
-            var meta = ObjType.getMetadata();
+            var meta = ObjType.GetMetaData();
             _host = new Uri(host, meta.uri);
         }
         
-        public async Task<T> getAllObjectRecordsAsync()
+        public async Task<T> GetObjectsFromAPIAsync()
         {
             object result = null;
 
@@ -52,7 +52,7 @@ namespace EOSNewYork.EOSCore
             return (T)result;
         }
 
-        public async Task<T> getAllObjectRecordsAsync(object postData)
+        public async Task<T> GetObjectsFromAPIAsync(object postData)
         {
             
             object result = null;

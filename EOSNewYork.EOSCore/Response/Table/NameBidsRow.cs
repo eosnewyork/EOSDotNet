@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EOSNewYork.EOSCore.Utilities;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.Table
 {
-    public class EOSNamebids_row : IEOSTable
+    public class NameBidsRow : IEOSTable
     {
         public string newname { get; set; }
         public string high_bidder { get; set; }
@@ -16,10 +17,10 @@ namespace EOSNewYork.EOSCore
         {
             get
             {
-                return EOSUtil.FromUnixTime(long.Parse(last_bid_time) / 1000000).ToString();
+                return EOSUtility.FromUnixTime(long.Parse(last_bid_time) / 1000000).ToString();
             }
         }
-        public EOSTableMetadata getMetadata()
+        public EOSTableMetadata GetMetaData()
         {
 
             var meta = new EOSTableMetadata
@@ -32,6 +33,5 @@ namespace EOSNewYork.EOSCore
 
             return meta;
         }
-
     }
 }

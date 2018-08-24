@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Response.API
 {
-    public class EOSInfo_row : IEOAPI
+    public class Info : IEOAPI
     {
         public string server_version { get; set; }
         public string chain_id { get; set; }
@@ -21,7 +21,7 @@ namespace EOSNewYork.EOSCore
         public Int64 block_cpu_limit { get; set; }
         public Int64 block_net_limit { get; set; }
 
-        public EOSAPIMetadata getMetadata()
+        public EOSAPIMetadata GetMetaData()
         {
             var meta = new EOSAPIMetadata
             {

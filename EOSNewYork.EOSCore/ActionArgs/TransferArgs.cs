@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EOSNewYork.EOSCore.Params
+namespace EOSNewYork.EOSCore.ActionArgs
 {
     public class TransferArgs
     {

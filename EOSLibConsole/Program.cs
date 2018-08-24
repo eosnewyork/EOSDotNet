@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using System.IO;
 using NLog;
 using EOSNewYork.EOSCore;
+using EOSNewYork.EOSCore.ActionArgs;
 using EOSNewYork.EOSCore.Params;
+using EOSNewYork.EOSCore.Response.API;
+using EOSNewYork.EOSCore.Response.Table;
 using EOSNewYork.EOSCore.Serialization;
 using EOSNewYork.EOSCore.Utilities;
 using Action = EOSNewYork.EOSCore.Params.Action;
@@ -20,18 +23,18 @@ namespace EOSLibConsole
         static void Main(string[] args)
         {
 
-            //EOSInfo.dumpGlobal();
-            //EOSInfo.dumpNameVotes();
-            //EOSInfo.dumpProducers();
-            //EOSInfo.dumpVoters();
-            //EOSInfo.dumpInfo();
-            //EOSInfo.dumpProduerSchedule();
-            //EOSInfo.dumpAccountInfo();
-            //EOSInfo.dumpAccountBalance();
-            //EOSInfo.dumpNewKeyPair();
-            //EOSInfo.dumpAbiJsonToBin();
-            //EOSInfo.dumpBlock();
-            EOSInfo.testTransaction();
+            //EOSInfo.GetGlobal();
+            //EOSInfo.GetNameVotes();
+            //EOSInfo.GetProducers();
+            //EOSInfo.GetVoters();
+            //EOSInfo.GetInfo();
+            //EOSInfo.GetProduerSchedule();
+            //EOSInfo.GetAccountInfo();
+            //EOSInfo.GetAccountBalance();
+            //EOSInfo.GetNewKeyPair();
+            //EOSInfo.GetAbiJsonToBin();
+            EOSInfo.GetBlock();
+            //EOSInfo.TestTransaction();
 
             Console.WriteLine("Done");
             //Console.ReadLine();
@@ -43,10 +46,10 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static Uri HOST = new Uri("http://dev.cryptolions.io:18888");
-        static Uri PennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
+        static Uri pennStationHOST = new Uri("http://pennstation.eosdocs.io:7001");
         static string privateKeyWIF = "";
             
-        public static void testTransaction()
+        public static void TestTransaction()
         {
             string _accountName = "yatendra1", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "";
             //prepare action object
@@ -54,7 +57,7 @@ namespace EOSLibConsole
                 account = new AccountName(_accountName),
                 name = new ActionName(_action),
                 authorization = new[]{
-                    new Authorization{
+                    new EOSNewYork.EOSCore.Params.Authorization{
                         actor = new AccountName(_accountName),
                         permission = new PermissionName(_permissionName)
                     }
@@ -66,17 +69,17 @@ namespace EOSLibConsole
             //BuyRamArgs _args = new BuyRamArgs(){ payer = _accountName, receiver = _accountName, quant = "0.001 EOS" };
             
             //convert action arguments to binary and save it in action.data
-            var abiJsonToBin = new EOS_Object<EOSAbiJsonToBin_row>(HOST).getAllObjectRecordsAsync(new EOSAbiJsonToBin_row.postData() { code = _code, action = _action, args = _args }).Result;
+            var abiJsonToBin = new EOS_Object<AbiJsonToBin>(HOST).GetObjectsFromAPIAsync(new AbiJsonToBinParam { code = _code, action = _action, args = _args }).Result;
             action.data = new BinaryString(abiJsonToBin.binargs);
             
             //get info
-            var info = new EOS_Object<EOSInfo_row>(HOST).getAllObjectRecordsAsync().Result;
+            var info = new EOS_Object<Info>(HOST).GetObjectsFromAPIAsync().Result;
             
             //get head block
-            var block = new EOS_Object<EOSBlock_row>(HOST).getAllObjectRecordsAsync(new EOSBlock_row.postData() { block_num_or_id = info.head_block_id }).Result;
+            var block = new EOS_Object<Block>(HOST).GetObjectsFromAPIAsync(new BlockParam { block_num_or_id = info.head_block_id }).Result;
             
             //prepare transaction object
-            var transaction = new Transaction {
+            var transaction = new EOSNewYork.EOSCore.Params.Transaction {
                 actions = new [] { action },
                 ref_block_num = (ushort)(block.block_num & 0xffff),
                 ref_block_prefix = block.ref_block_prefix,
@@ -84,7 +87,7 @@ namespace EOSLibConsole
             };
             
             //pack the transaction
-            var packedTransaction = new PackingSerializer().Serialize<Transaction>(transaction);
+            var packedTransaction = new PackingSerializer().Serialize<EOSNewYork.EOSCore.Params.Transaction>(transaction);
             
             //get chain id
             var chainId = Hex.HexToBytes(info.chain_id);
@@ -108,79 +111,77 @@ namespace EOSLibConsole
             }
 
             //push transaction
-            var transactionResult = new EOS_Object<EOSPushTransaction>(HOST).getAllObjectRecordsAsync(new EOSPushTransaction.postData() { packed_trx = Hex.ToString(packedTransaction), signatures = signatures, packed_context_free_data = string.Empty, compression = "none" }).Result;
-            Console.WriteLine(transactionResult.transaction_id);
+            var transactionResult = new EOS_Object<PushTransaction>(HOST).GetObjectsFromAPIAsync(new PushTransactionParam { packed_trx = Hex.ToString(packedTransaction), signatures = signatures, packed_context_free_data = string.Empty, compression = "none" }).Result;
+            logger.Info(transactionResult.transaction_id);
         }
-        public static void dumpNewKeyPair()
+        public static void GetNewKeyPair()
         {
-            var keypair = EOSKeyManager.GenerateKeyPair();
+            var keypair = KeyManager.GenerateKeyPair();
             logger.Info("New keypair generated. Private key: {0}, Public key: {1}", keypair.PrivateKey, keypair.PublicKey);
             logger.Info(keypair.PrivateKey.Length);
             logger.Info(keypair.PublicKey.Length);
         }
-        public static void dumpBlock()
+        public static void GetBlock()
         {
             string blockNumber = "100";
-            var info = new EOS_Object<EOSBlock_row>(HOST).getAllObjectRecordsAsync(new EOSBlock_row.postData() { block_num_or_id = blockNumber }).Result;
-            logger.Info("Block {0} recieved for block num {1}", "", blockNumber);
+            var block = new EOS_Object<Block>(HOST).GetObjectsFromAPIAsync(new BlockParam { block_num_or_id = blockNumber }).Result;
+            logger.Info("Block recieved for block num {0}", block.block_num);
         }
-        public static void dumpAbiJsonToBin()
+        public static void GetAbiJsonToBin()
         {
             string _code = "eosio.token", _action = "transfer", _memo = "";
             TransferArgs _args = new TransferArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1 EOS", memo = _memo };
-            var info = new EOS_Object<EOSAbiJsonToBin_row>(HOST).getAllObjectRecordsAsync(new EOSAbiJsonToBin_row.postData() { code = _code, action = _action, args = _args }).Result;
-            logger.Info("For code {0}, action {1}, args {2} and memo {3} recieved bin {4}", _code, _action, _args, _memo, info.binargs);
+            var abiJsonToBin = new EOS_Object<AbiJsonToBin>(HOST).GetObjectsFromAPIAsync(new AbiJsonToBinParam { code = _code, action = _action, args = _args }).Result;
+            logger.Info("For code {0}, action {1}, args {2} and memo {3} recieved bin {4}", _code, _action, _args, _memo, abiJsonToBin.binargs);
        
-            var info2 = new EOS_Object<EOSAbiBinToJson_row>(HOST).getAllObjectRecordsAsync(new EOSAbiBinToJson_row.postData() { code = _code, action = _action, binargs = info.binargs }).Result;
-            logger.Info("Received args json {0}", JsonConvert.SerializeObject(info2.args));
+            var abiBinToJson = new EOS_Object<AbiBinToJson>(HOST).GetObjectsFromAPIAsync(new AbiBinToJsonParam { code = _code, action = _action, binargs = abiJsonToBin.binargs }).Result;
+            logger.Info("Received args json {0}", JsonConvert.SerializeObject(abiBinToJson.args));
         }
-        public static void dumpAccountBalance()
+        public static void GetAccountBalance()
         {
-            var info = new EOS_StringArray<EOSCurrencyBalance_row>(HOST).getAllObjectRecordsAsync(new EOSCurrencyBalance_row.postData() { account = "guzdqmzqgyge", code = "everipediaiq", symbol = "IQ" }).Result;
-            logger.Info("The account had {0} balance records. The 1st (and probably the only balance) is {1}", info.balances.Count, info.balances.First());
+            var currencyBalance = new EOS_StringArray<CurrencyBalance>(HOST).GetObjectsFromAPIAsync(new CurrencyBalanceParam { account = "yatendra1", code = "eosio.token", symbol = "EOS" }).Result;
+            logger.Info("The account had {0} balance records. The 1st (and probably the only balance) is {1}", currencyBalance.balances.Count, currencyBalance.balances.First());
         }
 
 
-        public static void dumpAccountInfo()
+        public static void GetAccountInfo()
         {
-            var info = new EOS_Object<EOSAccount_row>(HOST).getAllObjectRecordsAsync(new EOSAccount_row.postData() { account_name = "yatendra1" }).Result;
-            logger.Info("{0} is currently the returned account name", info.account_name);
-            string json = JsonConvert.SerializeObject(info);
+            var account = new EOS_Object<Account>(HOST).GetObjectsFromAPIAsync(new AccountParam { account_name = "yatendra1" }).Result;
+            logger.Info("{0} is currently the returned account name", account.account_name);
+            string json = JsonConvert.SerializeObject(account);
             logger.Info("{0}", json);
         }
 
 
-        public static void dumpInfo()
+        public static void GetInfo()
         {
-            var info = new EOS_Object<EOSInfo_row>(HOST).getAllObjectRecordsAsync().Result;
+            var info = new EOS_Object<Info>(HOST).GetObjectsFromAPIAsync().Result;
             logger.Info("{0} is currently the head block producer", info.head_block_producer);
         }
 
-        public static void dumpProduerSchedule()
+        public static void GetProduerSchedule()
         {
-            var info = new EOS_Object<EOSProducerSchedule_row>(HOST).getAllObjectRecordsAsync().Result;
+            var info = new EOS_Object<ProducerSchedule>(HOST).GetObjectsFromAPIAsync().Result;
             foreach (var producer in info.active.producers)
             {
                 logger.Info("{0}\t{1}", producer.producer_name, producer.block_signing_key);
             }
-            
         }
 
-        public static void dumpGlobal()
+        public static void GetGlobal()
         {
-            var globalInfo = new EOS_Table<EOSGlobal_row>(HOST).getAllTableRecordsAsync().Result;
+            var globalInfo = new EOS_Table<GlobalRow>(HOST).GetRowsFromAPIAsync().Result;
 
             foreach (var global in globalInfo)
             {
                 logger.Debug("total_producer_vote_weight : {0}", global.total_producer_vote_weight);
             }
-
         }
 
-        public static void dumpNameVotes()
+        public static void GetNameVotes()
         {
             StringBuilder tsvnamebids = new StringBuilder();
-            var namebids = new EOS_Table<EOSNamebids_row>(HOST).getAllTableRecordsAsync().Result;
+            var namebids = new EOS_Table<NameBidsRow>(HOST).GetRowsFromAPIAsync().Result;
 
             foreach (var namebid in namebids)
             {
@@ -190,22 +191,20 @@ namespace EOSLibConsole
             File.WriteAllText("namebids.txt", tsvnamebids.ToString());
         }
 
-        public static void dumpProducers()
+        public static void GetProducers()
         {
             StringBuilder tsvproducers = new StringBuilder();
-            //var producers = core.getProducersAsync().Result;
 
-            var producers = new EOS_Table<EOSProducer_row>(HOST).getAllTableRecordsAsync().Result;
+            var producers = new EOS_Table<ProducerRow>(HOST).GetRowsFromAPIAsync().Result;
             foreach (var _producer in producers)
             {
                 string line = string.Format("{0}\t{1}\t{2}\t{3}\t{4}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url);
                 tsvproducers.AppendLine(line);
-                //logger.Debug(line);
             }
             logger.Debug("Write {0} records to disk", producers.Count);
             File.WriteAllText("producerReport.txt", tsvproducers.ToString());
 
-            IEnumerable<EOSProducer_row> query = producers.OrderByDescending(producer => producer.total_votes_long);
+            IEnumerable<ProducerRow> query = producers.OrderByDescending(producer => producer.total_votes_long);
 
             StringBuilder tsvTop21producers = new StringBuilder();
             StringBuilder tsvTop21producersNameOnly = new StringBuilder();
@@ -221,19 +220,14 @@ namespace EOSLibConsole
 
             File.WriteAllText("Top21ProducerReport.txt", tsvTop21producers.ToString());
             File.WriteAllText("Top21ProducerReportNameOnly.txt", tsvTop21producersNameOnly.ToString());
-
         }
 
-        public static void dumpVoters()
+        public static void GetVoters()
         {
-            //List<EOSVoter_row> proxyVoters = new List<EOSVoter_row>();
             StringBuilder tsvoutput = new StringBuilder();
 
-            //var tbl = new EOS_Table<EOSVoter_row>(PennStationHOST);
-            //var tbl = new EOS_Table<EOSVoter_row>(HOST);
-            //var voters = tbl.getAllTableRecordsAsync().Result;
-            var voters = new EOS_Table<EOSVoter_row>(HOST).getAllTableRecordsAsync().Result;
-            EOSUtil.updateProxyVotersWithProducerInfo(ref voters);
+            var voters = new EOS_Table<VoterRow>(HOST).GetRowsFromAPIAsync().Result;
+            EOSUtility.UpdateProxyVotersWithProducerInfo(ref voters);
 
             int voted = 0;
             int producerMatchCount = 0;
