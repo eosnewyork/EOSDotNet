@@ -34,7 +34,10 @@ namespace EOSLibConsole
             //EOSInfo.GetNewKeyPair();
             //EOSInfo.GetAbiJsonToBin();
             //EOSInfo.GetBlock();
-            EOSInfo.TestTransaction();
+            //EOSInfo.GetAbi();
+            //EOSInfo.GetCode();
+            EOSInfo.GetRawCodeAndAbi();
+            //EOSInfo.TestTransaction();
 
             Console.WriteLine("Done");
             //Console.ReadLine();
@@ -79,6 +82,24 @@ namespace EOSLibConsole
             string blockNumber = "100";
             var block = chainAPI.GetBlock(blockNumber);
             logger.Info("Block recieved for block num {0}", block.block_num);
+        }
+        public static void GetAbi()
+        {
+            string accountName = "eosio";
+            var abi = chainAPI.GetAbi(accountName);
+            logger.Info("For account {0} recieved abi {1}", accountName, JsonConvert.SerializeObject(abi));
+        }
+        public static void GetCode()
+        {
+            string accountName = "eosio";
+            var code = chainAPI.GetCode(accountName, true);
+            logger.Info("For account {0} recieved code {1}", accountName, JsonConvert.SerializeObject(code));
+        }
+        public static void GetRawCodeAndAbi()
+        {
+            string accountName = "eosio";
+            var rawCodeAndAbi = chainAPI.GetRawCodeAndAbi(accountName);
+            logger.Info("For account {0} recieved code and abi {1}", accountName, JsonConvert.SerializeObject(rawCodeAndAbi));
         }
         public static void GetAbiJsonToBin()
         {

@@ -13,9 +13,15 @@ namespace EOSNewYork.EOSCore
 {
     public class ChainAPI : BaseAPI
     {
+        private int delaySec = 120;
         public ChainAPI(){}
 
         public ChainAPI(string host) : base(host) {}
+
+        public ChainAPI(string host, int delaySec) : base(host)
+        {
+            this.delaySec = delaySec;
+        }
 
         public async Task<AbiBinToJson> GetAbiBinToJsonAsync(string code, string action, string binargs)
         {
@@ -48,6 +54,30 @@ namespace EOSNewYork.EOSCore
         public Block GetBlock(string blockNumOrId)
         {
             return GetBlockAsync(blockNumOrId).Result;
+        }
+        public async Task<Abi> GetAbiAsync(string accountName)
+        {
+            return await new EOS_Object<Abi>(HOST).GetObjectsFromAPIAsync(new AccountParam { account_name = accountName });
+        }
+        public Abi GetAbi(string accountName)
+        {
+            return GetAbiAsync(accountName).Result;
+        }
+        public async Task<Code> GetCodeAsync(string accountName, bool codeAsWasm)
+        {
+            return await new EOS_Object<Code>(HOST).GetObjectsFromAPIAsync(new CodeParam { account_name = accountName, code_as_wasm = codeAsWasm });
+        }
+        public Code GetCode(string accountName, bool codeAsWasm)
+        {
+            return GetCodeAsync(accountName, codeAsWasm).Result;
+        }
+        public async Task<RawCodeAndAbi> GetRawCodeAndAbiAsync(string accountName)
+        {
+            return await new EOS_Object<RawCodeAndAbi>(HOST).GetObjectsFromAPIAsync(new AccountParam { account_name = accountName });
+        }
+        public RawCodeAndAbi GetRawCodeAndAbi(string accountName)
+        {
+            return GetRawCodeAndAbiAsync(accountName).Result;
         }
         public async Task<CurrencyBalance> GetCurrencyBalanceAsync(string account, string code, string symbol)
         {
@@ -86,7 +116,7 @@ namespace EOSNewYork.EOSCore
                 actions = actions,
                 ref_block_num = (ushort)(block.block_num & 0xffff),
                 ref_block_prefix = block.ref_block_prefix,
-                expiration = new TimePointSec(block.timestamp_datetime.AddSeconds(120))
+                expiration = new TimePointSec(block.timestamp_datetime.AddSeconds(delaySec))
             };
             
             //pack the transaction
@@ -110,7 +140,7 @@ namespace EOSNewYork.EOSCore
                 privateKeys.Add(WifUtility.DecodePrivateWif(privateKeysInWIF[i]));
             }
             
-            //get signatures for each provate key by signing message hash with private key
+            //get signatures for each private key by signing message hash with private key
             string[] signatures = new string[privateKeys.Count];
             for(int i = 0; i< privateKeys.Count; i++)
             {
