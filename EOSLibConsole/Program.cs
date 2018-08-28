@@ -36,7 +36,9 @@ namespace EOSLibConsole
             //EOSInfo.GetBlock();
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
-            EOSInfo.GetRawCodeAndAbi();
+            //EOSInfo.GetRawCodeAndAbi();
+            //EOSInfo.GetActions();
+            EOSInfo.GetTransaction();
             //EOSInfo.TestTransaction();
 
             Console.WriteLine("Done");
@@ -51,6 +53,7 @@ namespace EOSLibConsole
         static string host = "http://dev.cryptolions.io:18888";
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
+        static HistoryAPI historyAPI = new HistoryAPI(host);
         static string privateKeyWIF = "5KENzJxJ6CwnKgi3TZ4sS9Fe6D6JqmZ85JWWtU8H7xNDT6JcbtL";
             
         public static void TestTransaction()
@@ -83,11 +86,23 @@ namespace EOSLibConsole
             var block = chainAPI.GetBlock(blockNumber);
             logger.Info("Block recieved for block num {0}", block.block_num);
         }
+        public static void GetActions()
+        {
+            string accountName = "eosio";
+            var actions = historyAPI.GetActions(-1, 100, accountName);
+            logger.Info("For account {0} recieved actions {1}", accountName, JsonConvert.SerializeObject(actions));
+        }
         public static void GetAbi()
         {
             string accountName = "eosio";
             var abi = chainAPI.GetAbi(accountName);
             logger.Info("For account {0} recieved abi {1}", accountName, JsonConvert.SerializeObject(abi));
+        }
+        public static void GetTransaction()
+        {
+            string id = "ebe3435b22e302c6e3021b97756cdd900099eeac9060db3dbd1b116c7bbeee69";
+            var transaction = historyAPI.GetTransaction(id, 11371727);
+            logger.Info("For transaction id {0} recieved transaction {1}", id, JsonConvert.SerializeObject(transaction));
         }
         public static void GetCode()
         {
