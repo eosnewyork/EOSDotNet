@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using EOSNewYork.EOSCore.Utilities;
 
 namespace EOSNewYork.EOSCore.Lib
 {
@@ -36,53 +36,23 @@ namespace EOSNewYork.EOSCore.Lib
         
         public async Task<T> GetObjectsFromAPIAsync()
         {
-            object result = null;
-
-            //HttpClient client = new HttpClient();
-            HttpResponseMessage response = null;
-
             logger.Debug("HTTP GET: {0}", _host);
 
-            response = await httpClient.GetAsync(_host);
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var values = JsonConvert.DeserializeObject<List<string>>(responseString);
-
+            var responseString = await HttpUtility.GetValidatedAPIResponse(_host);
             T m = (T)Activator.CreateInstance(typeof(T));
-            m.SetStringArray(values);
-
-            result = m;
-            return (T)result;
+            m.SetStringArray(JsonConvert.DeserializeObject<List<string>>(responseString));
+            return m;
         }
 
         public async Task<T> GetObjectsFromAPIAsync(object postData)
         {
-            
-            object result = null;
-
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = null;
-
             string json = JsonConvert.SerializeObject(postData);
-            StringContent x = new StringContent(json);
-
             logger.Debug("HTTP POST: {0}, DATA: {1}", _host, json);
 
-            response = await client.PostAsync(_host,x);
-
-            if(response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception("API Call did not respond with 200 OK");
-            }
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var values = JsonConvert.DeserializeObject<List<string>>(responseString);
-
+            var responseString = await HttpUtility.GetValidatedAPIResponse(_host, new StringContent(json));
             T m = (T)Activator.CreateInstance(typeof(T));
-            m.SetStringArray(values);
-
-            result = m;
-            return (T)result;
+            m.SetStringArray(JsonConvert.DeserializeObject<List<string>>(responseString));
+            return m;
         }
 
     }

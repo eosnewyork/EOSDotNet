@@ -22,7 +22,6 @@ namespace EOSLibConsole
     {
         static void Main(string[] args)
         {
-
             //EOSInfo.GetGlobal();
             //EOSInfo.GetNameVotes();
             //EOSInfo.GetProducers();
@@ -38,8 +37,8 @@ namespace EOSLibConsole
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
             //EOSInfo.GetActions();
-            EOSInfo.GetTransaction();
-            //EOSInfo.TestTransaction();
+            //EOSInfo.GetTransaction();
+            EOSInfo.TestTransaction();
 
             Console.WriteLine("Done");
             //Console.ReadLine();

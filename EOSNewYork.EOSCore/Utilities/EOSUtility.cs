@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Response.Table;
+using EOSNewYork.EOSCore.Serialization;
 using EOSNewYork.EOSCore.Lib;
+using Newtonsoft.Json;
 
 namespace EOSNewYork.EOSCore.Utilities
 {
@@ -17,6 +20,24 @@ namespace EOSNewYork.EOSCore.Utilities
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        public static async Task<string> GetValidatedAPIResponse(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            
+            if(response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
+            {
+                InternalServiceError error = JsonConvert.DeserializeObject<InternalServiceError>(responseString);
+                if(error.code == 500)
+                {
+                    throw new Exception(string.Format("Error thrown from node. Code: {0}, Mesage: {1}", error.error.code, error.error.name));
+                }
+                else
+                {
+                    throw new Exception("API Call did not respond with 200 OK");
+                }
+            }
+            return responseString;
+        }
         public static DateTime EOSTimeToUTC(Int64 slotTime)
         {
             Int64 interval = 500;
@@ -68,7 +89,6 @@ namespace EOSNewYork.EOSCore.Utilities
          
         }
 
-
         public static List<dynamic> FilterFields<T>(List<string> properties, List<T> data) where T: IEOSTable
         {
             List<dynamic> objList = new List<dynamic>();
@@ -89,7 +109,6 @@ namespace EOSNewYork.EOSCore.Utilities
             return objList;
         }
     }
-
 
     public static class StringUtil
     {

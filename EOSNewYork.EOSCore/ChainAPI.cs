@@ -13,7 +13,7 @@ namespace EOSNewYork.EOSCore
 {
     public class ChainAPI : BaseAPI
     {
-        private int delaySec = 120;
+        private int delaySec = 30;
         public ChainAPI(){}
 
         public ChainAPI(string host) : base(host) {}

@@ -7,7 +7,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using EOSNewYork.EOSCore.Serialization;
+using EOSNewYork.EOSCore.Utilities;
 
 namespace EOSNewYork.EOSCore.Lib
 {
@@ -37,47 +38,20 @@ namespace EOSNewYork.EOSCore.Lib
         
         public async Task<T> GetObjectsFromAPIAsync()
         {
-            object result = null;
-
-            //HttpClient client = new HttpClient();
-            HttpResponseMessage response = null;
-
             logger.Debug("HTTP GET: {0}", _host);
 
-            response = await httpClient.GetAsync(_host);
-            var responseString = await response.Content.ReadAsStringAsync();
-            T m = JsonConvert.DeserializeObject<T>(responseString);
-
-            result = m;
-            return (T)result;
+            var responseString = await HttpUtility.GetValidatedAPIResponse(_host);
+            return JsonConvert.DeserializeObject<T>(responseString);
         }
 
         public async Task<T> GetObjectsFromAPIAsync(object postData)
         {
-            
-            object result = null;
-
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = null;
-
             string json = JsonConvert.SerializeObject(postData);
-            StringContent x = new StringContent(json);
-
             logger.Debug("HTTP POST: {0}, DATA: {1}", _host, json);
 
-            response = await client.PostAsync(_host,x);
-            
-            if(response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
-            {
-                throw new Exception("API Call did not respond with 200 OK");
-            }
-            var responseString = await response.Content.ReadAsStringAsync();
-            T m = JsonConvert.DeserializeObject<T>(responseString);
-
-            result = m;
-            return (T)result;
+            var responseString = await HttpUtility.GetValidatedAPIResponse(_host, new StringContent(json));
+            return JsonConvert.DeserializeObject<T>(responseString);
         }
-
     }
 
 }
