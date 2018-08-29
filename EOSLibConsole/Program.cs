@@ -84,7 +84,7 @@ namespace EOSLibConsole
         {
             string blockNumber = "100";
             var block = chainAPI.GetBlock(blockNumber);
-            logger.Info("Block recieved for block num {0}", block.block_num);
+            logger.Info("For block num {0} recieved block {1}", blockNumber, JsonConvert.SerializeObject(block));
         }
         public static void GetActions()
         {

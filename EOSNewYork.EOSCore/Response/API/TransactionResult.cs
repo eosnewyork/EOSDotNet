@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Params;
 using EOSNewYork.EOSCore.Lib;
 using EOSNewYork.EOSCore.Serialization;
+using Newtonsoft.Json;
 
 namespace EOSNewYork.EOSCore.Response.API
 {
@@ -45,6 +46,19 @@ namespace EOSNewYork.EOSCore.Response.API
         public string status { get; set; }
         public uint cpu_usage_us { get; set; }
         public uint net_usage_words { get; set; }
-        //public Tuple<uint,JsonString> trx { get; set; }
+        [JsonConverter(typeof(TransactionReceiptTrxArray))]
+        public TransactionReceiptTrx trx { get; set; }
+    }
+    public class TransactionReceiptTrx
+    {
+        public uint index { get; set; }
+        public TransactionReceiptTrxInner trx { get; set; }
+    }
+    public class TransactionReceiptTrxInner
+    {
+        public List<string> signatures { get; set; }
+        public string compression { get; set; }
+        public string packed_context_free_data { get; set; }
+        public string packed_trx { get; set; }
     }
 }
