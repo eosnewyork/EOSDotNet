@@ -68,6 +68,34 @@ var abiJsonToBinSync = chainAPI.GetAbiJsonToBin(_code, _action, _args);
  
 
 #### ChainAPI
+##### PushTransaction
+Build, sign and push a transaction
+###### Method Signatures
+```
+public async Task<PushTransaction> PushTransactionAsync(Action[] actions, List<string> privateKeysInWIF);
+public PushTransaction PushTransaction(Action[] actions, List<string> privateKeysInWIF);
+```
+###### Example
+```
+string _accountName1 = "account1", _accountName2 = "account2", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "", privateKeyWIF = "...";
+
+//prepare arguments to be passed to action
+TransferArgs _args = new TransferArgs(){ from = _accountName1, to = _accountName2, quantity = "1 EOS", memo = _memo };
+
+//prepare action object
+Action action = new ActionUtility(host).GetActionObject(_accountName, _action, _permissionName, _code, _args);
+
+//get private keys to be used to sign
+List<string> privateKeysInWIF = new List<string> { privateKeyWIF };
+
+//delaySec parameter defaults to 30, to set it to a different value create chainAPI object as
+//var chainAPI = new ChainAPI("https://api.eosnewyork.io", 120)
+
+//called asynchronously
+var transactionResultAsync = await chainAPI.PushTransactionAsync(new [] { action }, privateKeysInWIF);
+//called synchronously
+var transactionResultSync = chainAPI.PushTransaction(new [] { action }, privateKeysInWIF);
+```
 ##### GetAbiBinToJson
 Converts binary abi to json
 ###### Method Signatures
@@ -212,34 +240,6 @@ public ProducerSchedule GetProducerSchedule();
 var producerScheduleAsync = await chainAPI.GetProducerScheduleAsync();
 //called synchronously
 var producerScheduleSync = chainAPI.GetProducerSchedule();
-```
-##### PushTransaction
-Push a transaction
-###### Method Signatures
-```
-public async Task<PushTransaction> PushTransactionAsync(Action[] actions, List<string> privateKeysInWIF);
-public PushTransaction PushTransaction(Action[] actions, List<string> privateKeysInWIF);
-```
-###### Example
-```
-string _accountName1 = "account1", _accountName2 = "account2", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "", privateKeyWIF = "...";
-
-//prepare arguments to be passed to action
-TransferArgs _args = new TransferArgs(){ from = _accountName1, to = _accountName2, quantity = "1 EOS", memo = _memo };
-
-//prepare action object
-Action action = new ActionUtility(host).GetActionObject(_accountName, _action, _permissionName, _code, _args);
-
-//get private keys to be used to sign
-List<string> privateKeysInWIF = new List<string> { privateKeyWIF };
-
-//delaySec parameter defaults to 30, to set it to a different value create chainAPI object as
-//var chainAPI = new ChainAPI("https://api.eosnewyork.io", 120)
-
-//called asynchronously
-var transactionResultAsync = await chainAPI.PushTransactionAsync(new [] { action }, privateKeysInWIF);
-//called synchronously
-var transactionResultSync = chainAPI.PushTransaction(new [] { action }, privateKeysInWIF);
 ```
 #### HistoryAPI
 ##### GetActions
