@@ -150,8 +150,8 @@ namespace EOSLibConsole
 
         public static void GetProduerSchedule()
         {
-            var info = chainAPI.GetProducerSchedule();
-            foreach (var producer in info.active.producers)
+            var producerSchedule = chainAPI.GetProducerSchedule();
+            foreach (var producer in producerSchedule.active.producers)
             {
                 logger.Info("{0}\t{1}", producer.producer_name, producer.block_signing_key);
             }
