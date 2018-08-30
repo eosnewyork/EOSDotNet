@@ -35,7 +35,7 @@ This repository currently contains three projects:
 
   
 
-*  **EOSDotNet** - This the library which can be included into your own project to build great things.
+*  **EOSNewYork.EOSCore** - This the library which can be included into your own project to build great things.
 
   
 
@@ -45,7 +45,7 @@ This repository currently contains three projects:
 
 *  **EOSLibConsole** - A scratch pad with some test which don't yet fit into the cscleos tool.
 
-### EOSDotNet
+### EOSNewYork.EOSCore
 All functionality in this library is divided into 4 APIs - 
  - ChainAPI (accessed via EOSNewYork.EOSDotNet.ChainAPI class) 
  - HistoryAPI (accessed via EOSNewYork.EOSDotNet.HistoryAPI class)
