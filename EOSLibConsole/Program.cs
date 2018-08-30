@@ -53,7 +53,7 @@ namespace EOSLibConsole
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
         static HistoryAPI historyAPI = new HistoryAPI(host);
-        static string privateKeyWIF = "5KENzJxJ6CwnKgi3TZ4sS9Fe6D6JqmZ85JWWtU8H7xNDT6JcbtL";
+        static string privateKeyWIF = "";
             
         public static void TestTransaction()
         {
