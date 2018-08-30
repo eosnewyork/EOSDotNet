@@ -9,6 +9,9 @@ namespace EOSNewYork.EOSCore.Utilities
 {
     public static class HttpUtility
     {
+        // Best to use a global HTTP Client
+        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+        //private static HttpClient Client = new HttpClient();
         private static readonly HttpClient httpClient;
         static HttpUtility()
         {

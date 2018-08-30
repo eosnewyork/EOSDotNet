@@ -13,18 +13,9 @@ namespace EOSNewYork.EOSCore.Lib
 {
     public class EOS_Table<T> where T : IEOSTable
     {
-        // Best to use a global HTTP Client
-        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        //private static HttpClient Client = new HttpClient();
-        private static readonly HttpClient httpClient;
         public List<T> rows = new List<T>();
         public bool more;
-
-        static EOS_Table()
-        {
-            httpClient = new HttpClient();
-        }
-
+        
         public List<T> GetRows()
         {
             return rows;

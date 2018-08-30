@@ -14,21 +14,9 @@ namespace EOSNewYork.EOSCore.Lib
 {
     public class EOS_Object<T> where T : IEOAPI
     {
-        // Best to use a global HTTP Client
-        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        //private static HttpClient Client = new HttpClient();
-        private static readonly HttpClient httpClient;
         Uri _host;
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
         
-        static EOS_Object()
-        {
-            httpClient = new HttpClient();
-
-        }
-       
-
         public EOS_Object(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));

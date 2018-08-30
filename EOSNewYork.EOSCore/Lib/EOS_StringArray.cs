@@ -13,20 +13,9 @@ namespace EOSNewYork.EOSCore.Lib
 {
     public class EOS_StringArray<T> where T : IEOAPI, IEOStringArray
     {
-        // Best to use a global HTTP Client
-        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        //private static HttpClient Client = new HttpClient();
-        private static readonly HttpClient httpClient;
         Uri _host;
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        
-        static EOS_StringArray()
-        {
-            httpClient = new HttpClient();
-
-        }
-       
         public EOS_StringArray(Uri host)
         {
             var ObjType = (T)Activator.CreateInstance(typeof(T));
@@ -54,7 +43,5 @@ namespace EOSNewYork.EOSCore.Lib
             m.SetStringArray(JsonConvert.DeserializeObject<List<string>>(responseString));
             return m;
         }
-
     }
-
 }
