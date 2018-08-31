@@ -81,7 +81,7 @@ namespace EOSNewYork.EOSCore
         }
         public async Task<CurrencyBalance> GetCurrencyBalanceAsync(string account, string code, string symbol)
         {
-            return await new EOS_Object<CurrencyBalance>(HOST).GetObjectsFromAPIAsync(new CurrencyBalanceParam { account = account, code = code, symbol = symbol });
+            return await new EOS_StringArray<CurrencyBalance>(HOST).GetObjectsFromAPIAsync(new CurrencyBalanceParam { account = account, code = code, symbol = symbol });
         }
         public CurrencyBalance GetCurrencyBalance(string account, string code, string symbol)
         {
