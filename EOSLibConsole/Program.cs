@@ -60,7 +60,7 @@ namespace EOSLibConsole
             
             string _accountName = "yatendra1", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "";
             //prepare arguments to be passed to action
-            TransferArgs _args = new TransferArgs(){ from = _accountName, to = _accountName, quantity = "1 EOS", memo = _memo };
+            TransferArgs _args = new TransferArgs(){ from = _accountName, to = _accountName, quantity = "1.0000 EOS", memo = _memo };
             //BuyRamArgs _args = new BuyRamArgs(){ payer = _accountName, receiver = _accountName, quant = "0.001 EOS" };
             
             //prepare action object
@@ -118,7 +118,7 @@ namespace EOSLibConsole
         public static void GetAbiJsonToBin()
         {
             string _code = "eosio.token", _action = "transfer", _memo = "";
-            TransferArgs _args = new TransferArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1 EOS", memo = _memo };
+            TransferArgs _args = new TransferArgs(){ from = "yatendra1", to = "yatendra1", quantity = "1.0000 EOS", memo = _memo };
             var abiJsonToBin = chainAPI.GetAbiJsonToBin(_code, _action, _args);
             logger.Info("For code {0}, action {1}, args {2} and memo {3} recieved bin {4}", _code, _action, _args, _memo, abiJsonToBin.binargs);
        

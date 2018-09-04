@@ -57,7 +57,7 @@ All functionality in this library is divided into 4 APIs -
 var chainAPI = new ChainAPI("https://api.eosnewyork.io");
       
 string  _code  =  "eosio.token", _action  =  "transfer", _memo  =  "";
-TransferArgs  _args  =  new  TransferArgs(){ from  =  "account1", to  =  "account2", quantity  =  "1 EOS", memo  =  _memo };
+TransferArgs  _args  =  new  TransferArgs(){ from  =  "account1", to  =  "account2", quantity  =  "1.0000 EOS", memo  =  _memo };
       
 //called asynchronously
 var abiJsonToBinAsync = await chainAPI.GetAbiJsonToBinAsync(_code, _action, _args);
@@ -80,7 +80,7 @@ public PushTransaction PushTransaction(Action[] actions, List<string> privateKey
 string _accountName1 = "account1", _accountName2 = "account2", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "", privateKeyWIF = "...";
 
 //prepare arguments to be passed to action
-TransferArgs _args = new TransferArgs(){ from = _accountName1, to = _accountName2, quantity = "1 EOS", memo = _memo };
+TransferArgs _args = new TransferArgs(){ from = _accountName1, to = _accountName2, quantity = "1.0000 EOS", memo = _memo };
 
 //prepare action object
 Action action = new ActionUtility(host).GetActionObject(_accountName, _action, _permissionName, _code, _args);
@@ -122,7 +122,7 @@ public AbiJsonToBin GetAbiJsonToBin(string code, string action, object args);
 ###### Example
 ```
 string  _code  =  "eosio.token", _action  =  "transfer", _memo  =  "";
-TransferArgs  _args  =  new  TransferArgs(){ from  =  "account1", to  =  "account2", quantity  =  "1 EOS", memo  =  _memo };
+TransferArgs  _args  =  new  TransferArgs(){ from  =  "account1", to  =  "account2", quantity  =  "1.0000 EOS", memo  =  _memo };
   
 //called asynchronously
 var abiJsonToBinAsync = await chainAPI.GetAbiJsonToBinAsync(_code, _action, _args);

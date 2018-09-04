@@ -17,7 +17,7 @@ namespace EOSNewYork.EOSCore.Utilities
         {
             //prepare action object
             Action action = new Action(){ 
-                account = new AccountName(accountName),
+                account = new AccountName(code),
                 name = new ActionName(actionName),
                 authorization = new[]{
                     new EOSNewYork.EOSCore.Params.Authorization{
@@ -27,7 +27,7 @@ namespace EOSNewYork.EOSCore.Utilities
                 }
             };
             
-            //convert action arguments to binary and save it in action.data
+            //convert action arguments to binary and save it in action.datareturn await new EOS_Object<PushTransaction>(HOST).GetObjectsFromAPIAsync(new PushTransactionParam { packed_trx = Hex.ToString(packedTransaction), signatures = signatures, packed_context_free_data = string.Empty, compression = "none" });
             var abiJsonToBin = chainAPI.GetAbiJsonToBin(code, actionName, args);
             action.data = new BinaryString(abiJsonToBin.binargs);
             return action;
