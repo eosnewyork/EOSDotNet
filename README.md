@@ -96,6 +96,7 @@ var transactionResultAsync = await chainAPI.PushTransactionAsync(new [] { action
 //called synchronously
 var transactionResultSync = chainAPI.PushTransaction(new [] { action }, privateKeysInWIF);
 ```
+&nbsp; 
 ##### GetAbiBinToJson
 Converts binary abi to json
 ###### Method Signatures
@@ -112,6 +113,7 @@ var  abiBinToJsonAsync  =  await chainAPI.GetAbiBinToJsonAsync(_code, _action, _
 //called synchronously
 var  abiBinToJsonSync  =  chainAPI.GetAbiBinToJson(_code, _action, _binargs);
 ```
+&nbsp; 
 ##### GetAbiJsonToBin
 Converts json abi to binary
 ###### Method Signatures
@@ -129,6 +131,7 @@ var abiJsonToBinAsync = await chainAPI.GetAbiJsonToBinAsync(_code, _action, _arg
 //called synchronously
 var abiJsonToBinSync = chainAPI.GetAbiJsonToBin(_code, _action, _args);
 ```
+&nbsp; 
 ##### GetAccount
 Get account details
 ###### Method Signatures
@@ -143,6 +146,7 @@ var accountAsync = await chainAPI.GetAccountAsync("account1");
 //called synchronously
 var accountSync = chainAPI.GetAccount("account1");
 ```
+&nbsp; 
 ##### GetBlock
 Get block details
 ###### Method Signatures
@@ -157,6 +161,7 @@ var blockAsync = await chainAPI.GetBlockAsync(100);
 //called synchronously
 var blockSync = chainAPI.GetBlock(100);
 ```
+&nbsp; 
 ##### GetAbi
 Get abi for contract
 ###### Method Signatures
@@ -171,6 +176,7 @@ var abiAsync = await chainAPI.GetAbiAsync("eosio");
 //called synchronously
 var abiSync = chainAPI.GetAbi("eosio");
 ```
+&nbsp; 
 ##### GetCode
 Get code for contract
 ###### Method Signatures
@@ -185,6 +191,7 @@ var codeAsync = await chainAPI.GetCodeAsync("eosio", true);
 //called synchronously
 var codeSync = chainAPI.GetCode("eosio", true);
 ```
+&nbsp; 
 ##### GetRawCodeAndAbi
 Get raw code and abi for contract
 ###### Method Signatures
@@ -199,6 +206,7 @@ var rawCodeAndAbiAsync = await chainAPI.GetRawCodeAndAbiAsync("eosio");
 //called synchronously
 var rawCodeAndAbiSync = chainAPI.GetRawCodeAndAbi("eosio");
 ```
+&nbsp; 
 ##### GetCurrencyBalance
 Get currency balance
 ###### Method Signatures
@@ -213,6 +221,7 @@ var currencyBalanceAsync = await chainAPI.GetCurrencyBalanceAsync("account1", "e
 //called synchronously
 var currencyBalanceSync = chainAPI.GetCurrencyBalance("account1", "eosio.token", "EOS");
 ```
+&nbsp; 
 ##### GetInfo
 Get blockchain info
 ###### Method Signatures
@@ -227,6 +236,7 @@ var infoAsync = await chainAPI.GetInfoAsync();
 //called synchronously
 var infoSync = chainAPI.GetInfo();
 ```
+&nbsp; 
 ##### GetProducerSchedule
 Get producer schedules
 ###### Method Signatures
@@ -241,6 +251,7 @@ var producerScheduleAsync = await chainAPI.GetProducerScheduleAsync();
 //called synchronously
 var producerScheduleSync = chainAPI.GetProducerSchedule();
 ```
+&nbsp; 
 #### HistoryAPI
 ##### GetActions
 Get actions for account
@@ -256,6 +267,7 @@ var actionsAsync = await historyAPI.GetActionsAsync(-1, 100, "eosio");
 //called synchronously
 var actionsSync = historyAPI.GetActions(-1, 100, "eosio");
 ```
+&nbsp; 
 ##### GetTransaction
 Get a transaction
 ###### Method Signatures
@@ -272,6 +284,7 @@ var transactionAsync = await historyAPI.GetTransactionAsync(id, 11371727);
 //called synchronously
 var transactionSync = historyAPI.GetTransaction(id, 11371727);  
 ```
+&nbsp; 
 #### TableAPI
 ##### GetGlobalRows
 Get global rows
@@ -287,6 +300,7 @@ var globalRowsAsync = await tableAPI.GetGlobalRowsAsync();
 //called synchronously
 var globalRowsSync = tableAPI.GetGlobalRows();
 ```
+&nbsp; 
 ##### GetNameBidRows
 Get name bid rows
 ###### Method Signatures
@@ -301,6 +315,7 @@ var nameBidRowsAsync = await tableAPI.GetNameBidRowsAsync();
 //called synchronously
 var nameBidRowsSync = tableAPI.GetNameBidRows();
 ```
+&nbsp; 
 ##### GetProducerRows
 Get producer rows
 ###### Method Signatures
@@ -315,6 +330,7 @@ var producerRowsAsync = await tableAPI.GetProducerRowsAsync();
 //called synchronously
 var producerRowsSync = tableAPI.GetProducerRows();
 ```
+&nbsp; 
 ##### GetVoterRows
 Get voter rows
 ###### Method Signatures
@@ -329,6 +345,7 @@ var voterRowsAsync = await tableAPI.GetVoterRowsAsync();
 //called synchronously
 var voterRowsSync = tableAPI.GetVoterRows();
 ```
+&nbsp; 
 #### KeyManager
 ##### GenerateKeyPair
 Generate new keypair
