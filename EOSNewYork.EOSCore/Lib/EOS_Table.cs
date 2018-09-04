@@ -7,23 +7,15 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using EOSNewYork.EOSCore.Utilities;
 
-namespace EOSNewYork.EOSCore
+namespace EOSNewYork.EOSCore.Lib
 {
     public class EOS_Table<T> where T : IEOSTable
     {
-        // Best to use a global HTTP Client
-        // https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        //private static HttpClient Client = new HttpClient();
-        private static readonly HttpClient httpClient;
         public List<T> rows = new List<T>();
         public bool more;
-
-        static EOS_Table()
-        {
-            httpClient = new HttpClient();
-        }
-
+        
         public List<T> GetRows()
         {
             return rows;
@@ -84,10 +76,6 @@ namespace EOSNewYork.EOSCore
         //The first record of the next subset fetched is the same as the last recod of the previous subset so we need to trim that. 
         public async Task<List<T>> GetRowsFromAPIAsync()
         {
-            //Call to update existing Loggers created with GetLogger() or 
-            //GetCurrentClassLogger()
-            //LogManager.ReconfigExistingLoggers();
-
             watch.Start();
 
             int limit = 1000; // The max # of records to get with each request. 
@@ -137,48 +125,28 @@ namespace EOSNewYork.EOSCore
         //This method fetches a specific subset of data. 
         async Task<EOS_Table<T>> GetDataSubset(string lower_bound, int limit)
         {
-
-            //Type listType = typeof(T);
-            //HttpClient client = new HttpClient();
-
             var rowObjType = (T)Activator.CreateInstance(typeof(T));
-            string contract = rowObjType.GetMetaData().contract;
-            string scope = rowObjType.GetMetaData().scope;
-            string table = rowObjType.GetMetaData().table;
-            string key_type = rowObjType.GetMetaData().key_type;
-
-            HttpResponseMessage response = null;
-            string postJSON = string.Empty;
+            EOSTableMetadata metadata = ((T)Activator.CreateInstance(typeof(T))).GetMetaData();
+            string key_type = metadata.key_type;
             var content = string.Empty;
             if (String.IsNullOrEmpty(lower_bound))
             {
-                postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}";
-                content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
+                content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit);
             }
             else
             {
                 if(string.IsNullOrEmpty(key_type))
                 {
-                    postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}";
-                    content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit);
+                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit);
                 }
                 else
                 {
-                    postJSON = "{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}, \"key_type\":\"{6}\"}}";
-                    content = string.Format(postJSON, scope, contract, table, lower_bound, "", limit, key_type);
-                }
-                
+                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}, \"key_type\":\"{6}\"}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit, key_type);
+                }           
             }
 
-            //{ "json":true,"code":"eosio","scope":"eosio","table":"voters","table_key":"","lower_bound":"242222222222","upper_bound":"","limit":1000,"key_type":"name","index_position":""}
-
-
-            var postdata = new StringContent(content);
-            response = await httpClient.PostAsync(_uri, postdata);
-            var responseString = await response.Content.ReadAsStringAsync();
-            EOS_Table<T> m = JsonConvert.DeserializeObject<EOS_Table<T>>(responseString);
-
-            return m;
+            var responseString = await HttpUtility.GetValidatedAPIResponse(_uri, new StringContent(content));
+            return JsonConvert.DeserializeObject<EOS_Table<T>>(responseString);
         }
     }
 }

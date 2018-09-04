@@ -18,24 +18,20 @@ namespace EOSNewYork.EOSCore.Serialization
             this.value = value;
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(JTokenType));
-        }
-
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            value = serializer.Deserialize<string>(reader);
-            var @object = (JsonString)Activator.CreateInstance(objectType, value);
-            return @object;
+            JToken token = JToken.Load(reader);
+            if (token.Type == JTokenType.Object)
+            {
+                return token.ToString();
+            }
+            return serializer.Deserialize<string>(reader);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             //serialize as actual JSON and not string data
-            var token = JToken.Parse(value.ToString());
-            writer.WriteToken(token.CreateReader());
-
+            writer.WriteValue(value);
         }
 
         public override void WriteToStream(Stream stream)

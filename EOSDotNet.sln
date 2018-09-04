@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cscleos", "cscleos\cscleos.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EOSNewYork.EOSCore", "EOSNewYork.EOSCore\EOSNewYork.EOSCore.csproj", "{3951BBBB-CE28-49D2-A7F7-869E4F89E7D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkConsole", "FrameworkConsole\FrameworkConsole.csproj", "{0B04ECDC-F9EB-4DE2-B3F7-324FF2836522}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EOSNewYork.EOSCore.Params;
 using EOSNewYork.EOSCore.Lib;
+using Newtonsoft.Json;
 
 namespace EOSNewYork.EOSCore.Response.API
 {
-    public class CurrencyBalance : IEOAPI, IEOStringArray
+    public class Code : IEOAPI
     {
-        public List<String> balances { get; set; }
+        public string account_name { get; set; }
+        public string code_hash { get; set; }
+        public string wast { get; set; }
+        public string wasm { get; set; }
+        public AbiInner abi { get; set; }
         
         public EOSAPIMetadata GetMetaData()
         {
             var meta = new EOSAPIMetadata
             {
-                uri = "/v1/chain/get_currency_balance"
+                uri = "/v1/chain/get_code"
             };
 
             return meta;
-        }
-
-        public void SetStringArray(List<String> array)
-        {
-            balances = array;
         }
     }
 }

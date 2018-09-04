@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Serialization;
 using Newtonsoft.Json;
+using EOSNewYork.EOSCore.Lib;
 
 namespace EOSNewYork.EOSCore.Response.API
 {
@@ -67,6 +68,9 @@ namespace EOSNewYork.EOSCore.Response.API
         public uint delay_sec { get; set; }
         public List<Action> context_free_actions { get; set; }
         public List<Action> actions { get; set; }
+        public Tuple<ushort, char[]>[] transaction_extensions { get; set; } = new Tuple<ushort, char[]>[0];
+        public List<string> signatures { get; set; }
+        public List<string> context_free_data { get; set; }
     }
     public class Authorization
     {

@@ -9,7 +9,7 @@ using System.Linq;
 using EOSNewYork.EOSCore;
 using EOSNewYork.EOSCore.Response.Table;
 using EOSNewYork.EOSCore.Utilities;
-
+using EOSNewYork.EOSCore.Lib;
 using NLog;
 
 namespace cscleos

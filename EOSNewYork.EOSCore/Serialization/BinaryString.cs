@@ -17,11 +17,6 @@ namespace EOSNewYork.EOSCore.Serialization
             this.value = value;
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(JTokenType));
-        }
-
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             value = serializer.Deserialize<string>(reader);
