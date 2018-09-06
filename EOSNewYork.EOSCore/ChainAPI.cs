@@ -87,6 +87,14 @@ namespace EOSNewYork.EOSCore
         {
             return GetCurrencyBalanceAsync(account, code, symbol).Result;
         }
+        public async Task<TableRows> GetTableRowsAsync(string scope, string code, string table, string json, int lowerBound, int upperBound, int limit)
+        {
+            return await new EOS_Object<TableRows>(HOST).GetObjectsFromAPIAsync(new TableRowsParam { scope = scope, code = code, table = table, json = json, lower_bound = lowerBound, upper_bound = upperBound, limit = limit });
+        }
+        public TableRows GetTableRows(string scope, string code, string table, string json, int lowerBound, int upperBound, int limit)
+        {
+            return GetTableRowsAsync(scope, code, table, json, lowerBound, upperBound, limit).Result;
+        }
         public async Task<Info> GetInfoAsync()
         {
             return await new EOS_Object<Info>(HOST).GetObjectsFromAPIAsync();

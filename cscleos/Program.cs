@@ -1,13 +1,16 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PowerArgs;
 using System;
 using System.Collections.Generic;
 using ServiceStack;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Linq;
 using EOSNewYork.EOSCore;
 using EOSNewYork.EOSCore.Response.Table;
+using EOSNewYork.EOSCore.Response.API;
 using EOSNewYork.EOSCore.Utilities;
 using EOSNewYork.EOSCore.Lib;
 using NLog;
@@ -19,62 +22,62 @@ namespace cscleos
     public class GetProgram
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        static Uri HOST = new Uri("https://api.eosnewyork.io");
-
+        static TableAPI tableAPI;
+        
         [HelpHook, ArgShortcut("-?"), ArgDescription("Shows this help")]
         public bool Help { get; set; }
 
         [ArgActionMethod, ArgDescription("Retrieve data from one of the well known EOS tables")]
-        public void getKnownTable([ArgRequired]getKnownTableArguments arg)
+        public void getKnownTable([ArgRequired]TableArguments args)
         {
-
-            logger.Info("Using API: {0}", arg.host);
+            tableAPI = new TableAPI(args.host.AbsoluteUri);
+            logger.Info("Using host: {0}", args.host);
 
             var fieldDoesNotExistError = false;
-            ServiceStack.Text.CsvConfig.ItemSeperatorString = arg.delimiter;
-            switch (arg.table)
+            ServiceStack.Text.CsvConfig.ItemSeperatorString = args.delimiter;
+            switch (args.table)
             {
                 case TableTypes.voters:
-                    fieldDoesNotExistError = CheckProperties<VoterRow>(arg);
+                    fieldDoesNotExistError = CheckProperties<VoterRow>(args);
                     if (!fieldDoesNotExistError)
                     {
-                        List<VoterRow> voters = new EOS_Table<VoterRow>(arg.host).GetRowsFromAPIAsync().Result;
-                        FilterAndOutput(arg, voters);
+                        List<VoterRow> voters = tableAPI.GetVoterRows();
+                        FilterAndOutput(args, voters);
                     }
                     break;
                 case TableTypes.producers:
-                    fieldDoesNotExistError = CheckProperties<ProducerRow>(arg);
+                    fieldDoesNotExistError = CheckProperties<ProducerRow>(args);
                     if (!fieldDoesNotExistError)
                     {
-                        List<ProducerRow> producers = new EOS_Table<ProducerRow>(HOST).GetRowsFromAPIAsync().Result;
-                        FilterAndOutput(arg, producers);
+                        List<ProducerRow> producers = tableAPI.GetProducerRows();
+                        FilterAndOutput(args, producers);
                     }
                     break;
                 case TableTypes.global:
-                    fieldDoesNotExistError = CheckProperties<GlobalRow>(arg);
+                    fieldDoesNotExistError = CheckProperties<GlobalRow>(args);
                     if (!fieldDoesNotExistError)
                     {
-                        List<GlobalRow> global = new EOS_Table<GlobalRow>(HOST).GetRowsFromAPIAsync().Result;
-                        FilterAndOutput(arg, global);
+                        List<GlobalRow> global = tableAPI.GetGlobalRows();
+                        FilterAndOutput(args, global);
                     }
                     break;
                 case TableTypes.namebids:
-                    fieldDoesNotExistError = CheckProperties<NameBidsRow>(arg);
+                    fieldDoesNotExistError = CheckProperties<NameBidsRow>(args);
                     if(!fieldDoesNotExistError)
                     {
-                        List<NameBidsRow> namebids = new EOS_Table<NameBidsRow>(HOST).GetRowsFromAPIAsync().Result;
-                        FilterAndOutput(arg, namebids);
+                        List<NameBidsRow> namebids = tableAPI.GetNameBidRows();
+                        FilterAndOutput(args, namebids);
                     }
                     break;
             }
         }
 
-        private static bool CheckProperties<T>(getKnownTableArguments arg) where T : IEOSTable
+        private static bool CheckProperties<T>(TableArguments args) where T : IEOSTable
         {
             bool error = false;
-            if(arg.fieldList != null)
+            if(args.fieldList != null)
             {
-                foreach (var field in arg.fieldList)
+                foreach (var field in args.fieldList)
                 {
                     if (typeof(T).GetProperty(field) == null)
                     {
@@ -88,17 +91,16 @@ namespace cscleos
                         error = true;
                     }
                 }
-
             }
             return error;
         }
 
-        private static void FilterAndOutput<T>(getKnownTableArguments arg, List<T> queryResult) where T : IEOSTable
+        private static void FilterAndOutput<T>(TableArguments args, List<T> queryResult) where T : IEOSTable
         {
             List<dynamic> filteredFieldObject = null;
-            if (arg.fieldList != null)
+            if (args.fieldList != null)
             {
-                foreach (var field in arg.fieldList)
+                foreach (var field in args.fieldList)
                 {
                     if(typeof(T).GetProperty(field) == null)
                     {
@@ -107,10 +109,10 @@ namespace cscleos
                     }
                 }               
 
-                filteredFieldObject = EOSUtility.FilterFields(arg.fieldList, queryResult);
+                filteredFieldObject = EOSUtility.FilterFields(args.fieldList, queryResult);
             }
                 
-            if (arg.outputFormat == OutputFormats.json)
+            if (args.outputFormat == OutputFormats.json)
             {
                 string json = string.Empty;
                 if (filteredFieldObject == null)
@@ -132,15 +134,11 @@ namespace cscleos
                 }
             }
         }
-
-
-
     }
 
-    public class getKnownTableArguments
+    public class TableArguments
     {
         [StickyArg]
-        //[ArgDefaultValue("https://api.eosnewyork.io")]
         [ArgRequired, ArgDescription("URL of the API that will be queried. This is a sticky param and will be remembered after you've used it once."), ArgPosition(1)]
         public Uri host { get; set; }
 
@@ -153,12 +151,11 @@ namespace cscleos
 
         [ArgDefaultValue("\t")]
         [ArgDescription("The characted to use as a delimiter when outputting as a CSV. Default is a tab."), ArgPosition(4)]
-        public String delimiter { get; set; }
+        public string delimiter { get; set; }
 
         [ArgDescription("A comma separated list of fields that should be returned. Default is to return all fields."), ArgPosition(5)]
-        public List<String> fieldList { get; set; }
+        public List<string> fieldList { get; set; }
     }
-
 
     public enum OutputFormats
     {
@@ -175,7 +172,6 @@ namespace cscleos
         static void Main(string[] args)
         {
             Args.InvokeAction<GetProgram>(args);
-
         }
     }
 }

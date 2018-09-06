@@ -346,6 +346,23 @@ var voterRowsAsync = await tableAPI.GetVoterRowsAsync();
 var voterRowsSync = tableAPI.GetVoterRows();
 ```
 &nbsp; 
+##### GetTableRows
+Get table rows of any table
+###### Method Signatures
+```
+//<T> should be a class similar to EOSNewYork.EOSCore.Response.Table.VoterRow
+// and  must implement IEOSTable
+public async Task<List<T>> GetTableRowsAsync<T>();
+public List<T> GetTableRows();
+```
+###### Example
+```
+//called asynchronously
+var customTableRowsAsync = await tableAPI.GetTableRowsAsync<CustomTableRow>();
+//called synchronously
+var customTableRowsSync = tableAPI.GetTableRows<CustomTableRow>();
+```
+&nbsp; 
 #### KeyManager
 ##### GenerateKeyPair
 Generate new keypair
