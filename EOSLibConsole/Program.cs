@@ -39,6 +39,7 @@ namespace EOSLibConsole
             //EOSInfo.GetActions();
             //EOSInfo.GetTransaction();
             EOSInfo.TestTransaction();
+            //EOSInfo.GetTableRows();
 
             Console.WriteLine("Done");
             //Console.ReadLine();
@@ -84,6 +85,13 @@ namespace EOSLibConsole
             string blockNumber = "100";
             var block = chainAPI.GetBlock(blockNumber);
             logger.Info("For block num {0} recieved block {1}", blockNumber, JsonConvert.SerializeObject(block));
+        }
+        public static void GetTableRows()
+        {
+            string code = "eosio", scope = "eosio", table = "global", json = "true";
+            int lowerBound = 0, upperBound = -1, limit = 10;
+            var tableRows = chainAPI.GetTableRows(scope, code, table, json, lowerBound, upperBound, limit);
+            logger.Info("Recieved rows {0}", JsonConvert.SerializeObject(tableRows));
         }
         public static void GetActions()
         {

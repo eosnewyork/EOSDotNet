@@ -14,7 +14,7 @@ namespace EOSNewYork.EOSCore
 
         public async Task<List<GlobalRow>> GetGlobalRowsAsync()
         {
-            return await new EOS_Table<GlobalRow>(HOST).GetRowsFromAPIAsync();
+            return await GetTableRowsAsync<GlobalRow>();
         }
         public List<GlobalRow> GetGlobalRows()
         {
@@ -22,7 +22,7 @@ namespace EOSNewYork.EOSCore
         }
         public async Task<List<NameBidsRow>> GetNameBidRowsAsync()
         {
-            return await new EOS_Table<NameBidsRow>(HOST).GetRowsFromAPIAsync();
+            return await GetTableRowsAsync<NameBidsRow>();
         }
         public List<NameBidsRow> GetNameBidRows()
         {
@@ -30,7 +30,7 @@ namespace EOSNewYork.EOSCore
         }
         public async Task<List<ProducerRow>> GetProducerRowsAsync()
         {
-            return await new EOS_Table<ProducerRow>(HOST).GetRowsFromAPIAsync();
+            return await GetTableRowsAsync<ProducerRow>();
         }
         public List<ProducerRow> GetProducerRows()
         {
@@ -38,11 +38,19 @@ namespace EOSNewYork.EOSCore
         }
         public async Task<List<VoterRow>> GetVoterRowsAsync()
         {
-            return await new EOS_Table<VoterRow>(HOST).GetRowsFromAPIAsync();
+            return await GetTableRowsAsync<VoterRow>();
         }
         public List<VoterRow> GetVoterRows()
         {
             return GetVoterRowsAsync().Result;
+        }
+        public async Task<List<T>> GetTableRowsAsync<T>() where T : IEOSTable
+        {
+            return await new EOS_Table<T>(HOST).GetRowsFromAPIAsync();
+        }
+        public List<T> GetTableRows<T>() where T : IEOSTable
+        {
+            return GetTableRowsAsync<T>().Result;
         }
     }
 }
