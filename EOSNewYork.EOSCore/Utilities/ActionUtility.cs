@@ -13,7 +13,7 @@ namespace EOSNewYork.EOSCore.Utilities
             chainAPI = new ChainAPI(host);
         }
 
-        public Action GetActionObject(string accountName, string actionName, string permissionName, string code, object args)
+        public Action GetActionObject(string accountName, string actionName, string permissionActor, string permissionName, string code, object args)
         {
             //prepare action object
             Action action = new Action(){ 
@@ -21,7 +21,7 @@ namespace EOSNewYork.EOSCore.Utilities
                 name = new ActionName(actionName),
                 authorization = new[]{
                     new EOSNewYork.EOSCore.Params.Authorization{
-                        actor = new AccountName(accountName),
+                        actor = new AccountName(permissionActor),
                         permission = new PermissionName(permissionName)
                     }
                 }
