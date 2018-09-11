@@ -33,12 +33,6 @@ namespace EOSNewYork.EOSCore.Response.API
         public List<ActionTrace> action_traces { get; set; }
         public object except { get; set; }
     }
-    // public class TransactionReceipt
-    // {
-    //     public string status { get; set; }
-    //     public uint cpu_usage_us { get; set; }
-    //     public uint net_usage_words { get; set; }
-    // }
     public class ActionTrace
     {
         public object receipt { get; set; }
@@ -48,6 +42,5 @@ namespace EOSNewYork.EOSCore.Response.API
         public string console { get; set; }
         public uint total_cpu_usage { get; set; }
         public string trx_id { get; set; }
-        //public List<object> inline_traces { get; set; }
     }
 }
