@@ -65,7 +65,7 @@ namespace EOSLibConsole
             //BuyRamArgs _args = new BuyRamArgs(){ payer = _accountName, receiver = _accountName, quant = "0.001 EOS" };
             
             //prepare action object
-            Action action = new ActionUtility(host).GetActionObject(_accountName, _action, _accountName, _permissionName, _code, _args);
+            Action action = new ActionUtility(host).GetActionObject(_action, _accountName, _permissionName, _code, _args);
             
             List<string> privateKeysInWIF = new List<string> { privateKeyWIF };
 
