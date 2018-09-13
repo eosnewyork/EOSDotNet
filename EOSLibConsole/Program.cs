@@ -59,13 +59,13 @@ namespace EOSLibConsole
         public static void TestTransaction()
         {
             
-            string _accountName = "yatendra1", _permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "";
+            string _accountName = "yatendra1", _accountNameTo = "yatendra1234",_permissionName = "active", _code = "eosio.token", _action = "transfer", _memo = "";
             //prepare arguments to be passed to action
-            TransferArgs _args = new TransferArgs(){ from = _accountName, to = _accountName, quantity = "1.0000 EOS", memo = _memo };
+            TransferArgs _args = new TransferArgs(){ from = _accountName, to = _accountNameTo, quantity = "1.0000 EOS", memo = _memo };
             //BuyRamArgs _args = new BuyRamArgs(){ payer = _accountName, receiver = _accountName, quant = "0.001 EOS" };
             
             //prepare action object
-            Action action = new ActionUtility(host).GetActionObject(_accountName, _action, _permissionName, _code, _args);
+            Action action = new ActionUtility(host).GetActionObject(_action, _accountName, _permissionName, _code, _args);
             
             List<string> privateKeysInWIF = new List<string> { privateKeyWIF };
 

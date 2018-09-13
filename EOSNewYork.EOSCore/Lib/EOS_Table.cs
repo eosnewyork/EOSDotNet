@@ -25,6 +25,7 @@ namespace EOSNewYork.EOSCore.Lib
         Logger logger = NLog.LogManager.GetCurrentClassLogger();
         List<EOS_Table<T>> subsets = new List<EOS_Table<T>>();
         Uri _uri;
+        EOSTableMetadata _metadata;
         Type t = typeof(T);
 
         public EOS_Table()
@@ -34,6 +35,12 @@ namespace EOSNewYork.EOSCore.Lib
         public EOS_Table(Uri host)
         {
             _uri = new Uri(host, "v1/chain/get_table_rows");
+        }
+
+        public EOS_Table(Uri host, EOSTableMetadata metaData)
+        {
+            _uri = new Uri(host, "v1/chain/get_table_rows");
+            _metadata = metaData;
         }
 
         //This method takes all the subsets that were collected and merges them into a single table. 
@@ -125,23 +132,25 @@ namespace EOSNewYork.EOSCore.Lib
         //This method fetches a specific subset of data. 
         async Task<EOS_Table<T>> GetDataSubset(string lower_bound, int limit)
         {
-            var rowObjType = (T)Activator.CreateInstance(typeof(T));
-            EOSTableMetadata metadata = ((T)Activator.CreateInstance(typeof(T))).GetMetaData();
-            string key_type = metadata.key_type;
+            if(_metadata == null)
+            {
+                _metadata = ((T)Activator.CreateInstance(typeof(T))).GetMetaData();
+            }
+            string key_type = _metadata.key_type;
             var content = string.Empty;
             if (String.IsNullOrEmpty(lower_bound))
             {
-                content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit);
+                content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"limit\":{5}}}", _metadata.scope, _metadata.contract, _metadata.table, lower_bound, "", limit);
             }
             else
             {
                 if(string.IsNullOrEmpty(key_type))
                 {
-                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit);
+                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}}}", _metadata.scope, _metadata.contract, _metadata.table, lower_bound, "", limit);
                 }
                 else
                 {
-                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}, \"key_type\":\"{6}\"}}", metadata.scope, metadata.contract, metadata.table, lower_bound, "", limit, key_type);
+                    content = string.Format("{{\"scope\":\"{0}\", \"code\":\"{1}\", \"table\":\"{2}\", \"json\": true, \"lower_bound\":\"{3}\", \"upper_bound\":\"{4}\", \"limit\":{5}, \"key_type\":\"{6}\"}}", _metadata.scope, _metadata.contract, _metadata.table, lower_bound, "", limit, key_type);
                 }           
             }
 
