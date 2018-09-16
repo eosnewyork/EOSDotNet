@@ -15,6 +15,7 @@ using EOSNewYork.EOSCore.Utilities;
 using Action = EOSNewYork.EOSCore.Params.Action;
 using Newtonsoft.Json;
 using Cryptography.ECDSA;
+using System.Text.RegularExpressions;
 
 namespace EOSLibConsole
 {
@@ -36,13 +37,13 @@ namespace EOSLibConsole
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
-            //EOSInfo.GetActions();
+            EOSInfo.GetActions();
             //EOSInfo.GetTransaction();
-            EOSInfo.TestTransaction();
+            //EOSInfo.TestTransaction();
             //EOSInfo.GetTableRows();
 
             Console.WriteLine("Done");
-            //Console.ReadLine();
+            Console.ReadLine();
 
         }
     }
@@ -50,7 +51,8 @@ namespace EOSLibConsole
     public static class EOSInfo
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        static string host = "http://dev.cryptolions.io:18888";
+        //static string host = "http://dev.cryptolions.io:18888";
+        static string host = "http://api.eosnewyork.io";
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
         static HistoryAPI historyAPI = new HistoryAPI(host);
@@ -93,12 +95,35 @@ namespace EOSLibConsole
             var tableRows = chainAPI.GetTableRows(scope, code, table, json, lowerBound, upperBound, limit);
             logger.Info("Recieved rows {0}", JsonConvert.SerializeObject(tableRows));
         }
+
         public static void GetActions()
         {
-            string accountName = "eosio";
-            var actions = historyAPI.GetActions(-1, 100, accountName);
-            logger.Info("For account {0} recieved actions {1}", accountName, JsonConvert.SerializeObject(actions));
+            string accountName = "eosnewyorkio";
+            var actions = historyAPI.GetActions(-1, -10, accountName);
+            //logger.Info("For account {0} recieved actions {1}", accountName, JsonConvert.SerializeObject(actions));
+
+            // List all actions
+            foreach (var action in actions.actions)
+            {
+                string singleLineData = Regex.Replace(action.action_trace.act.data.ToString(), @"\t|\n|\r", "");
+                Console.WriteLine(string.Format("# {0}\t{1}\t{2} => {3}\t{4}", action.account_action_seq, action.block_time_datetime, action.action_trace.act.account+"::"+ action.action_trace.act.name, action.action_trace.receipt.receiver, singleLineData));
+            }
+
+            Console.WriteLine("----------");
+
+            //List specific actions
+            var res = actions.actions.Where(pr => pr.action_trace.act.name == "transfer");
+            foreach (var action in res)
+            {
+                string singleLineData = Regex.Replace(action.action_trace.act.data.ToString(), @"\t|\n|\r", "");
+
+                if (action.action_trace.act.data.from == "eosio.vpay" || action.action_trace.act.data.from == "eosio.bpay")
+                    Console.WriteLine(string.Format("# {0}\t{1}\t{2} => {3}\t{4}", action.account_action_seq, action.block_time_datetime, action.action_trace.act.account + "::" + action.action_trace.act.name, action.action_trace.receipt.receiver, singleLineData));
+            }
+
+
         }
+
         public static void GetAbi()
         {
             string accountName = "eosio";

@@ -25,6 +25,7 @@ namespace EOSNewYork.EOSCore.Response.API
             return meta;
         }
     }
+
     public class OrderedActionResult
     {
         public ulong global_action_seq { get; set; }
@@ -38,6 +39,47 @@ namespace EOSNewYork.EOSCore.Response.API
                 return DateTime.SpecifyKind((DateTime.Parse(block_time)), DateTimeKind.Utc);
             }
         }
-        public JsonString action_trace { get; set; }
+        public OrderedActionResult_action_trace action_trace { get; set; }
     }
+
+
+    public class OrderedActionResult_action_trace
+    {
+        public OrderedActionResult_act act { get; set; }
+        public string console { get; set; }
+        public string cpu_usage { get; set; }
+        public uint elapsedtotal_cpu_usage { get; set; } // Set us uint but have not confimed the format.
+        public string trx_id { get; set; }
+        public uint total_cpu_usage { get; set; } // Set us uint but have not confimed the format.
+        public List<OrderedActionResult_action_trace> inline_traces { get; set; }
+        public OrderedActionResult_receipt receipt { get; set; }
+    }
+
+
+    public class OrderedActionResult_act
+    {
+        public string account { get; set; }
+        public List<OrderedActionResult_authorization> authorization { get; set; }
+        public dynamic data { get; set; }
+        public string hex_data { get; set; }
+        public string name { get; set; }
+    }
+
+    public class OrderedActionResult_receipt
+    {
+        public uint abi_sequence { get; set; } // Set us uint but have not confimed the format.
+        public string act_digest { get; set; }
+        //public String auth_sequence { get; set; } // Not sure how to handle this. Deserializer does not seem to like the structure. 
+        public uint code_sequence { get; set; } // Set us uint but have not confimed the format.
+        public uint global_sequence { get; set; } // Set us uint but have not confimed the format.
+        public string receiver { get; set; }
+        public uint recv_sequence { get; set; } // Set us uint but have not confimed the format.
+    }
+
+    public class OrderedActionResult_authorization
+    {
+        public string actor { get; set; }
+        public string permission { get; set; }
+    }
+
 }
