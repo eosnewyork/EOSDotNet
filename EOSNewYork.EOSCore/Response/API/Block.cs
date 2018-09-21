@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using EOSNewYork.EOSCore.Serialization;
 using Newtonsoft.Json;
 using EOSNewYork.EOSCore.Lib;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace EOSNewYork.EOSCore.Response.API
 {
@@ -40,6 +42,7 @@ namespace EOSNewYork.EOSCore.Response.API
             return meta;
         }
     }
+
     public class Transaction
     {
         public string status { get; set; }
@@ -48,8 +51,11 @@ namespace EOSNewYork.EOSCore.Response.API
         public Trx trx { get; set; }
         
     }
+
+    [JsonConverter(typeof(TxnConverter))]
     public class Trx
     {
+        public TrnType TransactionType { get; set; }
         public string id { get; set; }
         public List<string> signatures { get; set; }
         public string compression { get; set; }
@@ -58,6 +64,9 @@ namespace EOSNewYork.EOSCore.Response.API
         public string packed_trx { get; set; }
         public TransactionInner transaction { get; set; }
     }
+
+    public enum TrnType { Inline, Deferred };
+
     public class TransactionInner
     {
         public string expiration { get; set; }
@@ -72,11 +81,13 @@ namespace EOSNewYork.EOSCore.Response.API
         public List<string> signatures { get; set; }
         public List<string> context_free_data { get; set; }
     }
+
     public class Authorization
     {
         public string actor { get; set; }
         public string permission { get; set; }
     }
+
     public class Action
     {
         public string account { get; set; }
@@ -87,4 +98,59 @@ namespace EOSNewYork.EOSCore.Response.API
 
         public string hex_data { get; set; }
     }
+
+
+    public class TxnConverter : JsonConverter
+    {
+
+        public override bool CanWrite => false;
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType.GetTypeInfo().IsClass;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            object instance = Activator.CreateInstance(objectType);
+            var props = objectType.GetTypeInfo().DeclaredProperties.ToList();
+
+            PropertyInfo type_prop = props.FirstOrDefault(pi => pi.CanWrite && pi.PropertyType == typeof(TrnType));
+            var tokenType = reader.TokenType;
+            if (tokenType != JsonToken.String)
+            {
+                //instance = serializer.Deserialize(reader, objectType);
+                type_prop.SetValue(instance, TrnType.Inline);
+                JObject jo = JObject.Load(reader);
+
+                foreach (JProperty jp in jo.Properties())
+                {
+                    var name = jp.Name;
+                    //PropertyInfo prop = props.FirstOrDefault(pi => pi.CanWrite && pi.GetCustomAttribute<JsonPropertyAttribute>().PropertyName == name);
+                    PropertyInfo prop = props.FirstOrDefault(pi => pi.CanWrite && pi.Name == name);
+                    prop?.SetValue(instance, jp.Value.ToObject(prop.PropertyType, serializer));
+                }
+            }
+            else
+            {
+                type_prop.SetValue(instance, TrnType.Deferred);
+                PropertyInfo id_prop = props.FirstOrDefault(pi => pi.CanWrite && pi.Name == "id");
+                id_prop.SetValue(instance, reader.Value.ToString());
+            }
+
+
+       
+
+            return instance;
+            
+//            return serializer.Deserialize(reader, objectType);
+        }
+    }
+
+
 }

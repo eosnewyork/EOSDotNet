@@ -33,11 +33,11 @@ namespace EOSLibConsole
             //EOSInfo.GetAccountBalance();
             //EOSInfo.GetNewKeyPair();
             //EOSInfo.GetAbiJsonToBin();
-            //EOSInfo.GetBlock();
+            EOSInfo.GetBlock();
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
-            EOSInfo.GetActions();
+            //EOSInfo.GetActions();
             //EOSInfo.GetTransaction();
             //EOSInfo.TestTransaction();
             //EOSInfo.GetTableRows();
@@ -84,7 +84,7 @@ namespace EOSLibConsole
         }
         public static void GetBlock()
         {
-            string blockNumber = "100";
+            string blockNumber = "0107b7ae3c9845ecdbdb66afb8e2be2af3d515e0c01e8082c0cb17127610af49";
             var block = chainAPI.GetBlock(blockNumber);
             logger.Info("For block num {0} recieved block {1}", blockNumber, JsonConvert.SerializeObject(block));
         }
