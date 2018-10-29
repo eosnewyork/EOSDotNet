@@ -8,11 +8,13 @@ using EOSNewYork.EOSCore.Serialization;
 using EOSNewYork.EOSCore.Utilities;
 using Action = EOSNewYork.EOSCore.Params.Action;
 using EOSNewYork.EOSCore.Lib;
+using NLog;
 
 namespace EOSNewYork.EOSCore
 {
     public class ChainAPI : BaseAPI
     {
+        static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private int delaySec = 30;
         public ChainAPI(){}
 
@@ -113,12 +115,14 @@ namespace EOSNewYork.EOSCore
         }
         public async Task<PushTransaction> PushTransactionAsync(Action[] actions, List<string> privateKeysInWIF)
         {
+            logger.Debug("GetInfoAsync");           
             //get info
             var info = await GetInfoAsync();
-            
+
+            logger.Debug("GetBlockAsync");
             //get head block
             var block = await GetBlockAsync(info.head_block_id);
-            
+
             //prepare transaction object
             var transaction = new EOSNewYork.EOSCore.Params.Transaction {
                 actions = actions,
@@ -155,9 +159,11 @@ namespace EOSNewYork.EOSCore
                 signatures[i] = WifUtility.EncodeSignature(Secp256K1Manager.SignCompressedCompact(messageHash, privateKeys[i]));
             }
 
+            logger.Debug("push transaction - GetObjectsFromAPIAsync");
             //push transaction
             return await new EOS_Object<PushTransaction>(HOST).GetObjectsFromAPIAsync(new PushTransactionParam { packed_trx = Hex.ToString(packedTransaction), signatures = signatures, packed_context_free_data = string.Empty, compression = "none" });
         }
+
         public PushTransaction PushTransaction(Action[] actions, List<string> privateKeysInWIF)
         {
             return PushTransactionAsync(actions, privateKeysInWIF).Result;
