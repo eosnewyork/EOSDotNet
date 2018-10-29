@@ -34,11 +34,11 @@ namespace EOSNewYork.EOSCore.Utilities
                 InternalServiceError error = JsonConvert.DeserializeObject<InternalServiceError>(responseString);
                 if(error.code == 500)
                 {
-                    throw new Exception(string.Format("Error thrown from node. Code: {0}, Mesage: {1}", error.error.code, error.error.name));
+                    throw new Exception(string.Format("Error thrown from node. Code: {0}, Mesage: {1}. Detail: {2}", error.error.code, error.error.name, responseString));
                 }
                 else
                 {
-                    throw new Exception("API Call did not respond with 200 OK");
+                    throw new Exception(string.Format("API Call did not respond with 200 OK. Detail {0}", responseString));
                 }
             }
             return responseString;
