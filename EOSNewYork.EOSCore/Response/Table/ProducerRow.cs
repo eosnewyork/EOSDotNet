@@ -9,6 +9,7 @@ namespace EOSNewYork.EOSCore.Response.Table
 {
     public class ProducerRow : IEOSTable
     {
+        public long last_claim_time { get; set; }
         public string owner { get; set; }
         public string total_votes { get; set; }
         public string producer_key { get; set; }
@@ -23,6 +24,21 @@ namespace EOSNewYork.EOSCore.Response.Table
                 return double.Parse(total_votes);
             }
         }
+
+        public DateTime last_claim_time_DateTime
+        {
+            get
+            {
+                DateTime last = DateTime.MinValue;
+                if(last_claim_time > 0)
+                    last = Utilities.EOSUtility.FromUnixTime(last_claim_time, true);
+
+                return last;
+            }
+        }
+
+
+        
         public EOSTableMetadata GetMetaData()
         {
 

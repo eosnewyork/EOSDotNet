@@ -25,7 +25,7 @@ namespace EOSLibConsole
         {
             //EOSInfo.GetGlobal();
             //EOSInfo.GetNameVotes();
-            //EOSInfo.GetProducers();
+            EOSInfo.GetProducers();
             //EOSInfo.GetVoters();
             //EOSInfo.GetInfo();
             //EOSInfo.GetProduerSchedule();
@@ -33,7 +33,7 @@ namespace EOSLibConsole
             //EOSInfo.GetAccountBalance();
             //EOSInfo.GetNewKeyPair();
             //EOSInfo.GetAbiJsonToBin();
-            EOSInfo.GetBlock();
+            //EOSInfo.GetBlock();
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
@@ -220,7 +220,7 @@ namespace EOSLibConsole
             var producers = tableAPI.GetProducerRows();
             foreach (var _producer in producers)
             {
-                string line = string.Format("{0}\t{1}\t{2}\t{3}\t{4}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url);
+                string line = string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url, _producer.last_claim_time_DateTime);
                 tsvproducers.AppendLine(line);
             }
             logger.Debug("Write {0} records to disk", producers.Count);

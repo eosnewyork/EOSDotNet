@@ -48,8 +48,13 @@ namespace EOSNewYork.EOSCore.Utilities
             return UTCTime;
         }
 
-        public static DateTime FromUnixTime(long unixTime)
+        public static DateTime FromUnixTime(long unixTime, bool microseconds = false)
         {
+            if(microseconds)
+            {
+                unixTime = unixTime / 1000000;
+            }
+
             return epoch.AddSeconds(unixTime);
         }
 
