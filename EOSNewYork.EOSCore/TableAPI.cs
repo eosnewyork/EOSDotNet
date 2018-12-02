@@ -52,5 +52,15 @@ namespace EOSNewYork.EOSCore
         {
             return GetTableRowsAsync<T>().Result;
         }
+
+        public async Task<List<RammarketRow>> GetRammarketRowsAsync()
+        {
+            return await GetTableRowsAsync<RammarketRow>();
+        }
+        public List<RammarketRow> GetRammarketRows()
+        {
+            return GetRammarketRowsAsync().Result;
+        }
+
     }
 }
