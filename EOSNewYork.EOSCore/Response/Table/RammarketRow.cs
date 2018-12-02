@@ -15,6 +15,14 @@ namespace EOSNewYork.EOSCore.Response.Table
         public BaseWeightBalance base_ { get; set; }
         public QuoteWeightBalance quote { get; set; }
 
+        public double supply_double
+        {
+            get
+            {
+                return double.Parse(supply.Replace(" RAMCORE", ""));
+            }
+        }
+
         public EOSTableMetadata GetMetaData()
         {
             var meta = new EOSTableMetadata

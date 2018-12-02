@@ -207,7 +207,7 @@ namespace EOSLibConsole
 
             foreach (var ramrow in rammarketInfo)
             {
-                logger.Debug("supply : {0}", ramrow.supply);
+                logger.Debug("supply : {0}", ramrow.supply_double);
                 logger.Debug("base : {0}, {1}", ramrow.base_.balance_long, ramrow.base_.weight);
                 logger.Debug("quote : {0}, {1}", ramrow.quote.balance_double, ramrow.quote.weight);
             }
