@@ -24,9 +24,9 @@ namespace EOSLibConsole
         static void Main(string[] args)
         {
             //EOSInfo.GetGlobal();
-            EOSInfo.GetRammarket();
+            //EOSInfo.GetRammarket();
             //EOSInfo.GetNameVotes();
-            //EOSInfo.GetProducers();
+            EOSInfo.GetProducers();
             //EOSInfo.GetVoters();
             //EOSInfo.GetInfo();
             //EOSInfo.GetProduerSchedule();
@@ -53,7 +53,7 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         //static string host = "http://dev.cryptolions.io:18888";
-        static string host = "http://api.eosnewyork.io";
+        static string host = "https://proxy.eosnode.tools";
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
         static HistoryAPI historyAPI = new HistoryAPI(host);
@@ -247,10 +247,10 @@ namespace EOSLibConsole
             foreach (var _producer in query)
             {
                 countTop21++;
-                tsvTop21producers.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url));
+                tsvTop21producers.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", _producer.owner, _producer.total_votes, _producer.is_active, _producer.unpaid_blocks, _producer.url,_producer.last_claim_time_DateTime));
                 tsvTop21producersNameOnly.AppendLine(string.Format("{0}", _producer.owner));
-                if (countTop21 == 21)
-                    break;
+                //if (countTop21 == 21)
+                    //break;
             }
 
             File.WriteAllText("Top21ProducerReport.txt", tsvTop21producers.ToString());

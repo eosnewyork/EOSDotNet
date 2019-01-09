@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,8 @@ namespace EOSNewYork.EOSCore.Response.Table
 {
     public class ProducerRow : IEOSTable
     {
-        public long last_claim_time { get; set; }
+        //public long last_claim_time { get; set; }
+        public string last_claim_time { get; set; }
         public string owner { get; set; }
         public string total_votes { get; set; }
         public string producer_key { get; set; }
@@ -25,6 +27,7 @@ namespace EOSNewYork.EOSCore.Response.Table
             }
         }
 
+        /*
         public DateTime last_claim_time_DateTime
         {
             get
@@ -36,9 +39,22 @@ namespace EOSNewYork.EOSCore.Response.Table
                 return last;
             }
         }
+        */
+
+        public DateTime last_claim_time_DateTime
+        {
+            get
+            {
+                DateTime last = DateTime.MinValue;
+                
+                last = DateTime.Parse(last_claim_time, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+
+                return last;
+            }
+        }
 
 
-        
+
         public EOSTableMetadata GetMetaData()
         {
 
