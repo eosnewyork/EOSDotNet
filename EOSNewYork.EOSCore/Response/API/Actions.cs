@@ -29,8 +29,8 @@ namespace EOSNewYork.EOSCore.Response.API
     public class OrderedActionResult
     {
         public ulong global_action_seq { get; set; }
-        public int account_action_seq { get; set; }
-        public uint block_num { get; set; }
+        public ulong account_action_seq { get; set; }
+        public ulong block_num { get; set; }
         public string block_time { get; set; }
         public DateTime block_time_datetime
         {
@@ -67,13 +67,13 @@ namespace EOSNewYork.EOSCore.Response.API
 
     public class OrderedActionResult_receipt
     {
-        public uint abi_sequence { get; set; } // Set us uint but have not confimed the format.
+        public ulong abi_sequence { get; set; } // Set us uint but have not confimed the format.
         public string act_digest { get; set; }
         //public String auth_sequence { get; set; } // Not sure how to handle this. Deserializer does not seem to like the structure. 
-        public uint code_sequence { get; set; } // Set us uint but have not confimed the format.
-        public uint global_sequence { get; set; } // Set us uint but have not confimed the format.
+        public ulong code_sequence { get; set; } // Set us uint but have not confimed the format.
+        public ulong global_sequence { get; set; } // Set us uint but have not confimed the format.
         public string receiver { get; set; }
-        public uint recv_sequence { get; set; } // Set us uint but have not confimed the format.
+        public ulong recv_sequence { get; set; } // Set us uint but have not confimed the format.
     }
 
     public class OrderedActionResult_authorization

@@ -26,7 +26,7 @@ namespace EOSLibConsole
             //EOSInfo.GetGlobal();
             //EOSInfo.GetRammarket();
             //EOSInfo.GetNameVotes();
-            EOSInfo.GetProducers();
+            //EOSInfo.GetProducers();
             //EOSInfo.GetVoters();
             //EOSInfo.GetInfo();
             //EOSInfo.GetProduerSchedule();
@@ -38,7 +38,7 @@ namespace EOSLibConsole
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
-            //EOSInfo.GetActions();
+            EOSInfo.GetActions();
             //EOSInfo.GetTransaction();
             //EOSInfo.TestTransaction();
             //EOSInfo.GetTableRows();
@@ -108,6 +108,7 @@ namespace EOSLibConsole
             {
                 string singleLineData = Regex.Replace(action.action_trace.act.data.ToString(), @"\t|\n|\r", "");
                 Console.WriteLine(string.Format("# {0}\t{1}\t{2} => {3}\t{4}", action.account_action_seq, action.block_time_datetime, action.action_trace.act.account+"::"+ action.action_trace.act.name, action.action_trace.receipt.receiver, singleLineData));
+                //Console.WriteLine("xxx");
             }
 
             Console.WriteLine("----------");
@@ -121,7 +122,6 @@ namespace EOSLibConsole
                 if (action.action_trace.act.data.from == "eosio.vpay" || action.action_trace.act.data.from == "eosio.bpay")
                     Console.WriteLine(string.Format("# {0}\t{1}\t{2} => {3}\t{4}", action.account_action_seq, action.block_time_datetime, action.action_trace.act.account + "::" + action.action_trace.act.name, action.action_trace.receipt.receiver, singleLineData));
             }
-
 
         }
 
