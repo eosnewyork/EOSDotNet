@@ -40,9 +40,18 @@ namespace EOSNewYork.EOSCore
         {
             return await GetTableRowsAsync<VoterRow>();
         }
+        public async Task<List<UnusedaccntsWhitelistRow>> GetUnusedaccntsWhitelistRowsAsync()
+        {
+            return await GetTableRowsAsync<UnusedaccntsWhitelistRow>();
+        }
+        
         public List<VoterRow> GetVoterRows()
         {
             return GetVoterRowsAsync().Result;
+        }
+        public List<UnusedaccntsWhitelistRow> GetUnusedaccntsWhitelistRows()
+        {
+            return GetUnusedaccntsWhitelistRowsAsync().Result;
         }
         public async Task<List<T>> GetTableRowsAsync<T>() where T : IEOSTable
         {

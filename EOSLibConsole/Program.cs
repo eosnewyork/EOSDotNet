@@ -38,10 +38,11 @@ namespace EOSLibConsole
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
-            EOSInfo.GetActions();
+            //EOSInfo.GetActions();
             //EOSInfo.GetTransaction();
             //EOSInfo.TestTransaction();
             //EOSInfo.GetTableRows();
+            EOSInfo.GetUnusedaccntsWhitelist();
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -295,5 +296,30 @@ namespace EOSLibConsole
             File.WriteAllText("report.txt", tsvoutput.ToString());
         }
 
+
+
+        public static void GetUnusedaccntsWhitelist()
+        {
+            StringBuilder tsvoutput = new StringBuilder();
+
+            var whitelistedAccount = tableAPI.GetUnusedaccntsWhitelistRows();
+
+            int whitelistedAccountMatchCount = 0;
+            foreach (var account in whitelistedAccount)
+            {
+                whitelistedAccountMatchCount++;
+                tsvoutput.AppendLine(string.Format("\"{0}\",\"{1}\"", account.account, account.eth_address));
+            }
+
+
+            Console.WriteLine(whitelistedAccount.Count + " Records returned");
+            if (whitelistedAccount.Count > 0)
+            {
+                Console.WriteLine(whitelistedAccount[0].account + " = 1st record");
+                Console.WriteLine(whitelistedAccount[0].eth_address + " = 1st record");
+            }
+
+            File.WriteAllText("whitelisted.csv", tsvoutput.ToString());
+        }
     }
 }
