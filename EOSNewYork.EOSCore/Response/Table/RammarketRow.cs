@@ -19,7 +19,7 @@ namespace EOSNewYork.EOSCore.Response.Table
         {
             get
             {
-                return double.Parse(supply.Replace(" RAMCORE", ""));
+                return double.Parse(supply.Replace(" RAMCORE", ""), System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
@@ -45,7 +45,7 @@ namespace EOSNewYork.EOSCore.Response.Table
         {
             get
             {
-                return long.Parse(balance.Replace(" RAM",""));
+                return long.Parse(balance.Replace(" RAM",""), System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }
@@ -59,7 +59,7 @@ namespace EOSNewYork.EOSCore.Response.Table
         {
             get
             {
-                return double.Parse(balance.Replace(" EOS",""));
+                return double.Parse(balance.Replace(" EOS",""), System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }
