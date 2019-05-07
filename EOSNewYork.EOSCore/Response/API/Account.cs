@@ -45,7 +45,7 @@ namespace EOSNewYork.EOSCore.Response.API
                 else
                     clean_core_liquid_balance = core_liquid_balance.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(clean_core_liquid_balance);
+                return decimal.Parse(clean_core_liquid_balance, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
         public Int64 ram_quota { get; set; }
@@ -104,7 +104,7 @@ namespace EOSNewYork.EOSCore.Response.API
                 else
                     net_weight_clean = net_weight.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(net_weight_clean);
+                return decimal.Parse(net_weight_clean, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
@@ -118,7 +118,7 @@ namespace EOSNewYork.EOSCore.Response.API
                 else
                     cpu_weight_clean = cpu_weight.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(cpu_weight_clean);
+                return decimal.Parse(cpu_weight_clean, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }
@@ -170,7 +170,7 @@ namespace EOSNewYork.EOSCore.Response.API
                 else
                     net_amount_clean = net_amount.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(net_amount_clean);
+                return decimal.Parse(net_amount_clean, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
@@ -184,7 +184,7 @@ namespace EOSNewYork.EOSCore.Response.API
                 else
                     cpu_amount_clean = cpu_amount.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(cpu_amount_clean);
+                return decimal.Parse(cpu_amount_clean, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }

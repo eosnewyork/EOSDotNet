@@ -23,7 +23,7 @@ namespace EOSNewYork.EOSCore.Response.Table
         {
             get
             {
-                return double.Parse(total_votes);
+                return double.Parse(total_votes, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 

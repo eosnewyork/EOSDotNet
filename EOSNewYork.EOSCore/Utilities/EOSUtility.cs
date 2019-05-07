@@ -90,7 +90,7 @@ namespace EOSNewYork.EOSCore.Utilities
                 else
                     clean_core_liquid_balance = eosString.Trim().Replace(" EOS", "");
 
-                return decimal.Parse(clean_core_liquid_balance);
+                return decimal.Parse(clean_core_liquid_balance, System.Globalization.CultureInfo.InvariantCulture);
          
         }
 
