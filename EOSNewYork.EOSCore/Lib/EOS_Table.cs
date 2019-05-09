@@ -81,7 +81,7 @@ namespace EOSNewYork.EOSCore.Lib
 
         //This calls getDataSubset until there is no more data to fetch in the table. 
         //The first record of the next subset fetched is the same as the last recod of the previous subset so we need to trim that. 
-        public async Task<List<T>> GetRowsFromAPIAsync()
+        public async Task<List<T>> GetRowsFromAPIAsync(object settings = null)
         {
             watch.Start();
 
@@ -93,7 +93,16 @@ namespace EOSNewYork.EOSCore.Lib
             var lower_bound = "";
 
             //We need to know what the name of the primary key propery is, as we'll use this field value and then use it as the lower_bound in future requests.
-            var rowObjType = (T)Activator.CreateInstance(typeof(T));
+            T rowObjType;
+            //If a settings object is supplied then we'll want to construct that object using this object
+            if (settings != null)
+            {
+                rowObjType = (T)Activator.CreateInstance(typeof(T), settings);
+            } else
+            {
+                rowObjType = (T)Activator.CreateInstance(typeof(T));
+            }
+            
             string keyName = rowObjType.GetMetaData().primaryKey;
 
 
@@ -102,7 +111,7 @@ namespace EOSNewYork.EOSCore.Lib
                 logger.Debug("Get {0} records for data for Type {1}. Request {2}, lower_bound = {3} (API: {4}) - {5}", limit, t.ToString(), requestCount, lower_bound, _uri, watch.Elapsed);
 
                 string startkey = string.Empty;
-                var result = await GetDataSubset(lower_bound, limit);
+                var result = await GetDataSubset(lower_bound, limit, rowObjType);
 
                 more = result.more;
                 subsets.Add(result);
@@ -130,11 +139,12 @@ namespace EOSNewYork.EOSCore.Lib
         }
 
         //This method fetches a specific subset of data. 
-        async Task<EOS_Table<T>> GetDataSubset(string lower_bound, int limit)
+        async Task<EOS_Table<T>> GetDataSubset(string lower_bound, int limit, T rowObject)
         {
             if(_metadata == null)
             {
-                _metadata = ((T)Activator.CreateInstance(typeof(T))).GetMetaData();
+                //_metadata = ((T)Activator.CreateInstance(typeof(T))).GetMetaData();
+                _metadata = rowObject.GetMetaData();
             }
             string key_type = _metadata.key_type;
             var content = string.Empty;

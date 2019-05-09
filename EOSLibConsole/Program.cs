@@ -42,8 +42,11 @@ namespace EOSLibConsole
             //EOSInfo.GetTransaction();
             //EOSInfo.TestTransaction();
             //EOSInfo.GetTableRows();
-            EOSInfo.GetUnusedaccntsWhitelist();
-
+            //EOSInfo.GetUnusedaccntsWhitelist();
+            //EOSInfo.GetBancorConnectorSettings();
+            //EOSInfo.GetAccountTokenBalance();
+            //EOSInfo.GetBancorReserves();
+            EOSInfo.GetTokenStats();
             Console.WriteLine("Done");
             Console.ReadLine();
 
@@ -54,7 +57,8 @@ namespace EOSLibConsole
     {
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         //static string host = "http://dev.cryptolions.io:18888";
-        static string host = "https://proxy.eosnode.tools";
+        //static string host = "https://proxy.eosnode.tools";
+        static string host = "https://api.pennstation.eosnewyork.io:7101";
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
         static HistoryAPI historyAPI = new HistoryAPI(host);
@@ -320,6 +324,44 @@ namespace EOSLibConsole
             }
 
             File.WriteAllText("whitelisted.csv", tsvoutput.ToString());
+        }
+
+
+        public static void GetBancorConnectorSettings()
+        {
+            var settings = new BancorConnectorSettingsConstructorSettings() {accountName = "bancorc11124"};
+            var bancorConnectorSettings = tableAPI.GetBancorConnectorSettings(settings);
+
+            Console.WriteLine(bancorConnectorSettings[0].smart_contract);
+            Console.WriteLine(bancorConnectorSettings[0].smart_currency);
+        }
+
+        public static void GetBancorReserves()
+        {
+            var settings = new BancorConnectorReservesConstructorSettings() { accountName = "bancorc11124" };
+            var bancorConnectorReserves = tableAPI.GetBancorConnectorReserves(settings);
+
+            foreach (var reserve in bancorConnectorReserves)
+            {
+                Console.WriteLine(reserve.contract);
+                Console.WriteLine(reserve.ratio);
+            }
+
+        }
+
+
+        public static void GetAccountTokenBalance()
+        {
+            var accountBalance = tableAPI.GetTokenAccountBalance(new GetTokenAccountBalanceConstructorSettings() { accountName = "wozzawozza11", tokenContract = "epraofficial" });
+            Console.WriteLine(accountBalance[0].balance_decimal);
+            Console.WriteLine(accountBalance[0].symbol);
+        }
+
+        public static void GetTokenStats()
+        {
+            var tokenStats = tableAPI.GetTokenStats(new GetTokenStatsConstructorSettings() { tokenContract = "bancorr11124", symbol = "BNTEPRA" });
+            Console.WriteLine(tokenStats[0].max_supply_decimal);
+            Console.WriteLine(tokenStats[0].supply_decimal);
         }
     }
 }

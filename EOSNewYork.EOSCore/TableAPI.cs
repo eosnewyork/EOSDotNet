@@ -44,7 +44,27 @@ namespace EOSNewYork.EOSCore
         {
             return await GetTableRowsAsync<UnusedaccntsWhitelistRow>();
         }
-        
+
+        public async Task<List<BancorConnectorSettingsRow>> GetBancorConnectorSettingsAsync(BancorConnectorSettingsConstructorSettings settings)
+        {
+            return await GetTableRowsAsync<BancorConnectorSettingsRow>(settings);
+        }
+
+        public async Task<List<BancorConnectorReservesRow>> GetBancorConnectorReservesAsync(BancorConnectorReservesConstructorSettings settings)
+        {
+            return await GetTableRowsAsync<BancorConnectorReservesRow>(settings);
+        }
+
+        public async Task<List<GetTokenAccountBalanceRow>> GetTokenAccountBalanceAsync(GetTokenAccountBalanceConstructorSettings settings)
+        {
+            return await GetTableRowsAsync<GetTokenAccountBalanceRow>(settings);
+        }
+
+        public async Task<List<GetTokenStatsRow>> GetTokenStatsAsync(GetTokenStatsConstructorSettings settings)
+        {
+            return await GetTableRowsAsync<GetTokenStatsRow>(settings);
+        }
+
         public List<VoterRow> GetVoterRows()
         {
             return GetVoterRowsAsync().Result;
@@ -53,13 +73,34 @@ namespace EOSNewYork.EOSCore
         {
             return GetUnusedaccntsWhitelistRowsAsync().Result;
         }
-        public async Task<List<T>> GetTableRowsAsync<T>() where T : IEOSTable
+
+        public List<BancorConnectorSettingsRow> GetBancorConnectorSettings(BancorConnectorSettingsConstructorSettings settings)
         {
-            return await new EOS_Table<T>(HOST).GetRowsFromAPIAsync();
+            return GetBancorConnectorSettingsAsync(settings).Result;
         }
-        public List<T> GetTableRows<T>() where T : IEOSTable
+
+        public List<BancorConnectorReservesRow> GetBancorConnectorReserves(BancorConnectorReservesConstructorSettings settings)
         {
-            return GetTableRowsAsync<T>().Result;
+            return GetBancorConnectorReservesAsync(settings).Result;
+        }
+
+        public List<GetTokenAccountBalanceRow> GetTokenAccountBalance(GetTokenAccountBalanceConstructorSettings settings)
+        {
+            return GetTokenAccountBalanceAsync(settings).Result;
+        }
+
+        public List<GetTokenStatsRow> GetTokenStats(GetTokenStatsConstructorSettings settings)
+        {
+            return GetTokenStatsAsync(settings).Result;
+        }
+
+        public async Task<List<T>> GetTableRowsAsync<T>(object settings = null) where T : IEOSTable
+        {
+            return await new EOS_Table<T>(HOST).GetRowsFromAPIAsync(settings);
+        }
+        public List<T> GetTableRows<T>(object settings = null) where T : IEOSTable
+        {
+            return GetTableRowsAsync<T>(settings).Result;
         }
 
         public async Task<List<RammarketRow>> GetRammarketRowsAsync()
