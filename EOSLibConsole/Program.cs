@@ -35,6 +35,7 @@ namespace EOSLibConsole
             //EOSInfo.GetNewKeyPair();
             //EOSInfo.GetAbiJsonToBin();
             //EOSInfo.GetBlock();
+            //EOSInfo.GetTraceBlock();
             //EOSInfo.GetAbi();
             //EOSInfo.GetCode();
             //EOSInfo.GetRawCodeAndAbi();
@@ -58,10 +59,12 @@ namespace EOSLibConsole
         static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         //static string host = "http://dev.cryptolions.io:18888";
         //static string host = "https://proxy.eosnode.tools";
-        static string host = "https://api.pennstation.eosnewyork.io:7101";
+        //static string host = "https://api.pennstation.eosnewyork.io:7101";
+        static string host = "http://localhost:8888";
         static TableAPI tableAPI = new TableAPI(host);
         static ChainAPI chainAPI = new ChainAPI(host);
         static HistoryAPI historyAPI = new HistoryAPI(host);
+        static TraceAPI traceAPI = new TraceAPI(host);
         static string privateKeyWIF = "";
             
         public static void TestTransaction()
@@ -92,6 +95,12 @@ namespace EOSLibConsole
         {
             string blockNumber = "0107b7ae3c9845ecdbdb66afb8e2be2af3d515e0c01e8082c0cb17127610af49";
             var block = chainAPI.GetBlock(blockNumber);
+            logger.Info("For block num {0} recieved block {1}", blockNumber, JsonConvert.SerializeObject(block));
+        }
+        public static void GetTraceBlock()
+        {
+            uint blockNumber = 150110090;
+            var block = traceAPI.GetBlock(blockNumber);
             logger.Info("For block num {0} recieved block {1}", blockNumber, JsonConvert.SerializeObject(block));
         }
         public static void GetTableRows()

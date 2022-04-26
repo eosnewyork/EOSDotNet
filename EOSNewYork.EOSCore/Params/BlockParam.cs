@@ -13,4 +13,9 @@ namespace EOSNewYork.EOSCore.Params
     {
        public string block_num_or_id { get; set; }
     }
+
+    public class TraceBlockParam
+    {
+        public uint block_num { get; set; }
+    }
 }
